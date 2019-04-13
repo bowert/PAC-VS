@@ -2,7 +2,7 @@ Members:
 
 Tommy Bower - bowert@purdue.edu
 
-Kyle Kovacik - kovacikk.purdue.edu
+Kyle Kovacik - kovacikk@purdue.edu
 
 Mark Mikhael -mmikhai@purdue.edu
 
