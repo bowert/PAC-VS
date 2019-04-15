@@ -25,4 +25,7 @@ from django.conf import settings
 urlpatterns = [
     #home
 	path('', views.home, name='home'),
+    path('home/', views.home, name='home'),
+    path('disconnected/', views.disconnected, name='disconnected'),
+    path('stats/', views.stats, name='stats'),
 ]
