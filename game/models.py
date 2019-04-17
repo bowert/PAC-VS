@@ -1,4 +1,4 @@
-""" from django.db import models
+from django.db import models
 from django.core.validators import MinValueValidator
 
 
@@ -22,12 +22,12 @@ class Ghost(models.Model):
     y = models.PositiveIntegerField(default = startPositiony)
 
 class Game(models.Model):
-    CreatorIp = models.CharField()
+    CreatorIp = models.CharField(max_length = 16)
     CreatorPort = models.PositiveIntegerField()
-    SeekerIP = models.CharField()
+    SeekerIP = models.CharField(max_length = 16)
     SeekerPort = models.PositiveIntegerField()
     PM = models.OneToOneField(PacMan,on_delete=models.CASCADE)
- """
+ 
 
 
 
