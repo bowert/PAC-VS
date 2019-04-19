@@ -1,3 +1,13 @@
+var roomName = {{ room_name_json }};
+document.onkeydown = keyPress;
+var role;
+var isGameStarted = false;
+
+//Starts Game
+document.querySelector('#startGame').onclick = function(e) {
+    isGameStarted = true;
+}
+
 //Set setPac and setGhost Buttons
 document.querySelector('#setPac').onclick = function(e) {
     role = "Pacman";
@@ -9,12 +19,6 @@ document.querySelector('#setGhost').onclick = function() {
     document.querySelector('#pac_role').innerHTML = role;
 }
 
-
-
-var roomName = {{ room_name_json }};
-document.onkeydown = keyPress;
-var role
-
 var pacSocket = new WebSocket(
     'ws://' + window.location.host +
     '/ws/pac_test/' + roomName + '/');
@@ -23,15 +27,6 @@ var pacSocket = new WebSocket(
 pacSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
     var message = data['pac_message'];
-
-    if (message == "setPac") {
-        role = "setGhost"
-        document.querySelector('#pac_role').innerHTML = role
-    }
-    else if (message == "setGhost") {
-        role = "setPac"
-        document.querySelector('#pac_role').innerHTML = role
-    }
 
     //document.write("In Message:", message)
     document.querySelector('#pac_position').value = message;
@@ -89,7 +84,9 @@ document.querySelector('#pac_position_submit').onclick = function(e) {
 //Send Data by Variable
 function sendData(e, message) {
     //document.write(message);
-    pacSocket.send(JSON.stringify({
-        'pac_message': message
-    }));        
+    if (isGameStarted && role != "No Role") {
+        pacSocket.send(JSON.stringify({
+            'pac_message': message
+        }));
+    }
 }

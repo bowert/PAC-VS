@@ -4,11 +4,31 @@
     <head>
 	<body style="background-color:black;">
         <title>Pac Home</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
 	<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" />
     <body>
         <p style="color:white;">Welcome to PAC-VS! The worlds premiere online Pac-Man VS experience.</p>
 		<p style="color:white;">To play, click on the button below to create a lobby.</p>
-    </body>
+        
+        <a href='/pac_test/lobby'>
+            <button>Create Lobby</button>
+        </a>
 
+        <input id="lobbyName" type="text">
+        <input id="joinLobby" type="button" value="Join Lobby">
+    </body>
+    <script>
+        //Join Lobby
+        document.querySelector('#joinLobby').onclick = function(e) {
+            var link = document.querySelector('#lobbyName').value;
+            console.log(link.length);
+            if (link.length > 0) {
+                window.location.href = "/pac_test/" + link;
+            }
+            else {
+                window.location.href = "/";
+            }
+        }
+    </script>
 </html>
