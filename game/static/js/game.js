@@ -281,6 +281,7 @@
 			this.ofy = 0;
 			this.oldofy = 0;
 			this.alive = true;
+			this.ibuffer = 0;
 	}
 	
 	function checkKey(e) {
@@ -288,32 +289,16 @@
 
 		with(pacman){
 			if (e.keyCode == '37') { //left
-				if(isClear(1)){
-					dir = 1;
-					dx = -1;
-					dy = 0;
-				}
+				ibuffer = 1;
 			}
 			else if (e.keyCode == '38') { //up
-				if(isClear(2)){
-					dir = 2;
-					dy = -1;
-					dx = 0;
-				}
+				ibuffer = 2;
 			}
 			else if (e.keyCode == '39') { //right
-				if(isClear(3)){
-					dir = 3;
-					dx = 1;
-					dy = 0;
-				}
+				ibuffer = 3;
 			}
 			else if (e.keyCode == '40') { //down
-				if(isClear(4)){
-					dir = 4;
-					dy = 1;
-					dx = 0;
-				}
+				ibuffer = 4;
 			}
 		}
 	}
@@ -324,6 +309,38 @@
 		
 		document.onkeydown = checkKey;
 		
+		with(pacman){
+			if(offsetConv == 1){
+				if (ibuffer == 1) { //left
+					if(isClear(1)){
+						dir = 1;
+						dx = -1;
+						dy = 0;
+					}
+				}
+				else if (ibuffer == 2) { //up
+					if(isClear(2)){
+						dir = 2;
+						dy = -1;
+						dx = 0;
+					}
+				}
+				else if (ibuffer == 3) { //right
+					if(isClear(3)){
+						dir = 3;
+						dx = 1;
+						dy = 0;
+					}
+				}
+				else if (ibuffer == 4) { //down
+					if(isClear(4)){
+						dir = 4;
+						dy = 1;
+						dx = 0;
+					}
+				}
+			}
+		}
 		with(pacman) {
 			if (ofx + ofy == 0) 
 				move();
@@ -430,20 +447,19 @@
 				}
 				//telePac(x, y, "pacman");
 				offsetConv++;
-					
 			}
 			if(pelletsEaten == 147){	//Victory condition
 				console.log("victory!");
 			}
-			drawChar(x, y, "pacman");
-			//drawCharSpec(ofx, ofy, "pacman");
+			//drawChar(x, y, "pacman");
+			drawCharSpec(ofx, ofy, "pacman");
 		}
 		with(ghost1){
 			drawChar(x, y, "ghost1");
 		}
 		
 		//if (gameOn) {
-			pacTimer= setTimeout("main()", 8);
+			pacTimer= setTimeout("main()", 6);
 		//}
 	}
 	
