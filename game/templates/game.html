@@ -1,0 +1,76 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+	<canvas id="map" width="1300" height="600" style="border:1px solid #c3c3c3;">
+	</canvas>
+	
+	<div style="display:none;">
+	<img id="pacman" src="{% static 'images/pacman.png' %}" width="300" height="227">
+	</div>
+	
+	<div style="display:none;">
+	<img id="pellet" src="{% static 'images/pellet.png' %}" width="300" height="227">
+	</div>
+	
+	<div style="display:none;">
+	<img id="powerpellet" src="{% static 'images/powerpellet.png' %}" width="300" height="227">
+	</div>
+	
+	<div style="display:none;">
+	<img id="ghost1" src="{% static 'images/ghost1.png' %}" width="300" height="227">
+	</div>
+
+    <head>
+	<body style="background-color:black;">
+        <title>Game</title>
+
+    </head>
+    <body>
+	<script type="text/javascript" src="{% static 'js/game.js' %}"></script>
+	
+        <script>
+		var canvas = document.getElementById("map");
+		var ctx = canvas.getContext("2d");
+		var i;
+		var mazeGrid = [
+			"0000000000000000000",
+			"0911c111709111c1170",
+			"0100100010100010010",
+			"0d11e111a1a111e11b0",
+			"0100101000001010010",
+			"0811b081709160d1160",
+			"0000100010100010000",
+			"00001091a1a17010000",
+			"0000101000001010000",
+			"1111e1b0   0d1e1111",
+			"0000101000001010000",
+			"000010 11111 010000",
+			"0000101000001010000",
+			"0911e1b17091b1e1170",
+			"0100100010100010010",
+			"0870d1c1a1a1c1b0960",
+			"0010101000001010100",
+			"09a1608170916081a70",
+			"0100000010100000010",
+			"08111111a1a11111160",
+			"0000000000000000000",
+		];
+		ctx.fillStyle = "#2121DE";
+		for (i = 0; i < (mazeGrid.length); i++) {
+			var o;
+			for(o = 0; o < 19; o++) {
+				if (mazeGrid[i].charAt(o) == '0'){
+					//ctx.fillRect(400+o*25, i*25, 25, 25);
+					var img = document.getElementById("pacman");
+					
+				}
+			}
+			
+		}
+		
+		
+		</script>
+    </body>
+
+</html>

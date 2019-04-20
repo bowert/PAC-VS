@@ -18,6 +18,10 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+#from channels.routing import route, route_class
+#from channels.staticfiles import StaticFilesConsumer
+
+#channel_routing = []
 
 urlpatterns = [
     path('', include('game.urls')),

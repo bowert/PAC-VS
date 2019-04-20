@@ -11,3 +11,6 @@ def disconnected(request):
 
 def stats(request):
     return render(request, 'stats.html')
+
+def game(request):
+	return render(request, 'game.html')
