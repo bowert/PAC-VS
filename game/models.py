@@ -28,7 +28,10 @@ class Game(models.Model):
     SeekerPort = models.PositiveIntegerField()
     PM = models.OneToOneField(PacMan,on_delete=models.CASCADE)
  
-
+class Pellets(models.Model):
+    x = models.PositiveIntegerField()
+    y = models.PositiveIntegerField()
+    isEaten = models.BooleanField(default=False)
 
 
 
