@@ -11,14 +11,28 @@
         <p style="color:white;">Welcome to PAC-VS! The worlds premiere online Pac-Man VS experience.</p>
 		<p style="color:white;">To play, click on the button below to create a lobby.</p>
         
-        <a href='/pac_test/lobby'>
-            <button>Create Lobby</button>
-        </a>
-
-        <input id="lobbyName" type="text">
-        <input id="joinLobby" type="button" value="Join Lobby">
+        <form name="createLobby" id="inputs" method="GET">
+                <button class="form-control" name="createLobby" id="createLobby" type="submit" value="createLobby">Create Lobby</button>
+            <div class="form-group">
+                <input class="form-control" name="lobbyName" id="lobbyName" type="text">
+            </div>
+                <button class="form-control" name="joinLobby" id="joinLobby" type="submit" value="joinLobby">Join Lobby</button>
+        </form>
     </body>
+    <!---
     <script>
+        //Create Lobby
+        document.querySelector('#createLobby').onclick = function(e) {
+            var link = document.querySelector('#lobbyName').value;
+            console.log(link.length);
+            if (link.length > 0) {
+                window.location.href = "/pac_test/" + link;
+            }
+            else {
+                window.location.href = "/";
+            }
+        }
+
         //Join Lobby
         document.querySelector('#joinLobby').onclick = function(e) {
             var link = document.querySelector('#lobbyName').value;
@@ -30,5 +44,7 @@
                 window.location.href = "/";
             }
         }
+        
     </script>
+    -->
 </html>
