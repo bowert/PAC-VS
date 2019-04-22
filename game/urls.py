@@ -25,8 +25,11 @@ from django.conf import settings
 urlpatterns = [
     #home
 	path('', views.home, name='home'),
+    path('pac_vs', views.home, name='home'),
     path('home/', views.home, name='home'),
     path('disconnected/', views.disconnected, name='disconnected'),
     path('stats/', views.stats, name='stats'),
 	path('game/', views.game, name='game'),
+    path('test/<room_name>', views.test, name='test'),
+    path('pac_test/<room_name>', views.pac_test, name='pac_test'),
 ]

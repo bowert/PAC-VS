@@ -4,11 +4,67 @@
     <head>
 	<body style="background-color:black;">
         <title>Pac Home</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
 	<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" />
     <body>
         <p style="color:white;">Welcome to PAC-VS! The worlds premiere online Pac-Man VS experience.</p>
 		<p style="color:white;">To play, click on the button below to create a lobby.</p>
-    </body>
+        
+        <form name="createLobby" id="inputs" method="GET">
+            <div style="display: none">
+                <button class="form-control" name="joinLobby" id="joinLobby" type="submit" value="joinLobby">Join Lobby</button>
+            </div>
+            {% if error_message == "No Error" %}
 
+            {% else %}
+            <div style="padding-left: 2%" class="row">
+                    <div class="col-sm-2">
+                    </div>
+                    <div class="col-sm-2">
+                        <p style="color:red">{{ error_message }}</p>
+                    </div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <button style="width: 100%;" class="form-control" name="createLobby" id="createLobby" type="submit" value="createLobby">Create Lobby</button>
+                </div>
+                <div class="form-group col-sm-2">
+                    <input class="form-control" name="lobbyName" id="lobbyName" type="text">
+                </div>
+                <div class="col-sm-2">
+                    <button class="form-control" name="joinLobby" id="joinLobby" type="submit" value="joinLobby">Join Lobby</button>
+                </div>
+            </div>
+        </form>
+    </body>
+    <!---
+    <script>
+        //Create Lobby
+        document.querySelector('#createLobby').onclick = function(e) {
+            var link = document.querySelector('#lobbyName').value;
+            console.log(link.length);
+            if (link.length > 0) {
+                window.location.href = "/pac_test/" + link;
+            }
+            else {
+                window.location.href = "/";
+            }
+        }
+
+        //Join Lobby
+        document.querySelector('#joinLobby').onclick = function(e) {
+            var link = document.querySelector('#lobbyName').value;
+            console.log(link.length);
+            if (link.length > 0) {
+                window.location.href = "/pac_test/" + link;
+            }
+            else {
+                window.location.href = "/";
+            }
+        }
+        
+    </script>
+    -->
 </html>
