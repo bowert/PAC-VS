@@ -1,5 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+from . models import Server
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -59,6 +60,10 @@ class PacConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group
+        print("Oh yeah!")
+        servers = Server.objects.filter(serverName=self.room_name).first()
+        servers.numOfPlayers -= 1
+        servers.save()
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
