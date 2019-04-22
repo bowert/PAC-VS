@@ -82,8 +82,8 @@
 	</div>
 	
 	<audio id="waka">
-		<source src="" type="{% static 'sounds/Pacman_Waka_Waka' %}">
-	</audio>
+<source src="" type="{% static 'sounds/Pacman_Waka_Waka' %}">
+</audio>
 	
 	<div style="display:none;">
 	<img id="blue" src="{% static 'images/blue.png' %}" width="300" height="227">
