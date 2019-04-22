@@ -8,6 +8,8 @@ import json
 
 # Create your views here.
 def home(request):
+    error = "No Error"
+
 
     if (request.method == "GET"):
         #print("here")
@@ -23,6 +25,7 @@ def home(request):
                 print(servers)
                 if (servers != None and servers.numOfPlayers != 0):
                     print("Server already Created")
+                    error = "Server Already Created"
                 else:
                     Server.objects.create(serverName=lobbyName, numOfPlayers=0)
                     return redirect('/pac_test/' + lobbyName)
@@ -31,15 +34,17 @@ def home(request):
                 print(servers)
                 if (servers == None):
                     print("Server Doesn't Exist")
+                    error = "Server Doesn't Exist"
                 elif(servers.numOfPlayers >= 2):
                     print("Server Already Full")
+                    error = "Server Already Full"
                 else:
                     print("redirect")
                     return redirect('/pac_test/' + lobbyName)
             #else:
             print(lobbyName)
 
-    return render(request, 'pac_vs.html')
+    return render(request, 'pac_vs.html', {'error_message': error})
 
 def disconnected(request):
     return render(request, 'disconnected.html')

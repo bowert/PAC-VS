@@ -12,11 +12,31 @@
 		<p style="color:white;">To play, click on the button below to create a lobby.</p>
         
         <form name="createLobby" id="inputs" method="GET">
-                <button class="form-control" name="createLobby" id="createLobby" type="submit" value="createLobby">Create Lobby</button>
-            <div class="form-group">
-                <input class="form-control" name="lobbyName" id="lobbyName" type="text">
-            </div>
+            <div style="display: none">
                 <button class="form-control" name="joinLobby" id="joinLobby" type="submit" value="joinLobby">Join Lobby</button>
+            </div>
+            {% if error_message == "No Error" %}
+
+            {% else %}
+            <div style="padding-left: 2%" class="row">
+                    <div class="col-sm-2">
+                    </div>
+                    <div class="col-sm-2">
+                        <p style="color:red">{{ error_message }}</p>
+                    </div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <button style="width: 100%;" class="form-control" name="createLobby" id="createLobby" type="submit" value="createLobby">Create Lobby</button>
+                </div>
+                <div class="form-group col-sm-2">
+                    <input class="form-control" name="lobbyName" id="lobbyName" type="text">
+                </div>
+                <div class="col-sm-2">
+                    <button class="form-control" name="joinLobby" id="joinLobby" type="submit" value="joinLobby">Join Lobby</button>
+                </div>
+            </div>
         </form>
     </body>
     <!---
