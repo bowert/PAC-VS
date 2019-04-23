@@ -28,7 +28,7 @@ def home(request):
                     error = "Server Already Created"
                 else:
                     Server.objects.create(serverName=lobbyName, numOfPlayers=0)
-                    return redirect('/pac_test/' + lobbyName)
+                    return redirect('/game/' + lobbyName)
             elif(request.GET.get('joinLobby')):
                 servers = Server.objects.filter(serverName=lobbyName).first()
                 print(servers)
@@ -40,7 +40,7 @@ def home(request):
                     error = "Server Already Full"
                 else:
                     print("redirect")
-                    return redirect('/pac_test/' + lobbyName)
+                    return redirect('/game/' + lobbyName)
             #else:
             print(lobbyName)
 
@@ -52,8 +52,18 @@ def disconnected(request):
 def stats(request):
     return render(request, 'stats.html')
 
-def game(request):
-	return render(request, 'game.html')
+def game(request, room_name):
+    servers = Server.objects.filter(serverName=room_name).first()
+    
+    if (servers == None or servers.numOfPlayers >= 2):
+        return redirect('/home')
+    else:
+        servers.numOfPlayers += 1
+        servers.save()
+        return render(request, 'pac_test.html', {
+            'room_name_json': mark_safe(json.dumps(room_name))
+        })
+
 def test(request, room_name):
     return render(request, 'test.html', {
         'room_name_json': mark_safe(json.dumps(room_name))
