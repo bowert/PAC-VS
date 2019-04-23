@@ -60,7 +60,7 @@ def game(request, room_name):
     else:
         servers.numOfPlayers += 1
         servers.save()
-        return render(request, 'pac_test.html', {
+        return render(request, 'game.html', {
             'room_name_json': mark_safe(json.dumps(room_name))
         })
 
