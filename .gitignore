@@ -1,4 +1,4 @@
-settings.py
+pac_vs/settings.py
 
 *.log
 *.pot
