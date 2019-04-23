@@ -15,7 +15,7 @@ pac_vs/settings.py
 Main/static/images/profile_pictures/*
 
 
-*/settings.py
+settings.py
 */*.pyc
 */*/*.pyc
 */*/*/*.pyc
