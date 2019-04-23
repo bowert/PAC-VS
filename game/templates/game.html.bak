@@ -82,23 +82,61 @@
 	</div>
 	
 	<audio id="waka">
-<source src="" type="{% static 'sounds/Pacman_Waka_Waka' %}">
-</audio>
+		<source src="" type="{% static 'sounds/Pacman_Waka_Waka' %}">
+	</audio>
 	
 	<div style="display:none;">
 	<img id="blue" src="{% static 'images/blue.png' %}" width="300" height="227">
 	</div>
 
     <head>
+		<style>
+				p {
+					color: white;
+				}
+		</style>
 	<body style="background-color:black;">
         <title>Game</title>
 
     </head>
     <body>
-	<script type="text/javascript" src="{% static 'js/game.js' %}"></script>
-	
-        <script>
-		var canvas = document.getElementById("map");
+			<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" />
+			<br>
+		
+			<div class="row" style="padding-left:2%;">
+				<div class="col-sm-2">
+					<input id="setPac" type="button" value="Select Pacman" style="width:100%">
+				</div>
+				<div class="col-sm-2">
+						<input id="setGhost" type="button" value="Select Ghosts" style="width:100%">
+				</div>
+				<div class="col-sm-1">
+						<p>Role: </p>
+				</div>
+				<div class="col-sm-1">
+						<p id="pac_role">No Role</p>
+				</div>
+			</div>
+		
+			<br>
+		
+			<div class="row" style="padding-left: 5%;">
+				<input id="startGame" type="button" value="Start Game" style="width: 20%">
+				<div style="padding-left: 2%;">
+					<input id="pac_position_input" type="text">
+					<input id="pac_position_submit" type="button" value="Send"/>
+				</div>
+			</div>
+		
+			<br>
+		
+			<p>Logs:</p>
+			<textarea readonly id="pac_position" cols="20" rows="14"> </textarea>
+	<!--<script type="text/javascript" src="{% static 'js/game.js' %}"></script>-->
+	<script>
+
+	var isPac;
+	var canvas = document.getElementById("map");
 		var ctx = canvas.getContext("2d");
 		var i;
 		var mazeGrid = [
@@ -136,9 +174,1229 @@
 			}
 			
 		}
+
+		//This is MY STUFF
+		var roomName = {{ room_name_json }};
+    	document.onkeydown = keyPress;
+    	var role = "No Role";
+    	var isGameStarted = false;
+
+    	//Starts Game
+    	document.querySelector('#startGame').onclick = function(e) {
+			sendData(e, "t");
+    	    isGameStarted = true;
+    	}
+
+    	//Set setPac and setGhost Buttons
+    	document.querySelector('#setPac').onclick = function(e) {
+    	    role = "p";
+			isPac = true;
+    	    document.querySelector('#pac_role').innerHTML = role;
+    	}
+
+    	document.querySelector('#setGhost').onclick = function() {
+    	role = "g";
+		isPac = false;
+    	document.querySelector('#pac_role').innerHTML = role;
+    	}
+		
+
+    	var pacSocket = new WebSocket(
+    	    'ws://' + window.location.host +
+    	'/ws/game/' + roomName + '/');
+
+    	
+
+    	pacSocket.onclose = function(e) {
+    	    //print("oh no")
+    	    console.error('Chat socket closed unexpectedly');
+    	};
+
+    	//document.querySelector('#chat-message-input').focus();
+		
+
+    	//Key is Pressed
+    	function keyPress(e) {
+    	    e = e || window.event;
+
+        	//sendData(e, e.keyCode);
+
+        	if (e.keyCode == '38') {
+        	    // up arrow
+        	    sendData(e, "u");
+        	}
+        	else if (e.keyCode == '40') {
+        	    // down arrow
+        	    sendData(e, "d");
+        	}
+        	else if (e.keyCode == '37') {
+        	    // left arrow
+        	    sendData(e, "l");
+        	}
+        	else if (e.keyCode == '39') {
+        	    // right arrow
+        	    sendData(e, "r");
+        	}
+        	else if (e.keyCode == '49' && role == "g") {
+        	    // 1
+        	    sendData(e, "1");
+        	}
+        	else if (e.keyCode == '50' && role == "g") {
+        	    // 2
+        	    sendData(e, "2");
+        	}
+        	else if (e.keyCode == '51' && role == "g") {
+        	    // 3
+        	    sendData(e, "3");
+        	}
+        	else if (e.keyCode == '52' && role == "g") {
+        	    // 4
+        	    sendData(e, "4");
+        	} 
+        	else if (e.keyCode == '13') {
+        	    // Enter
+        	    document.querySelector('#pac_position_submit').click();
+        	}
+    	}	
+
+		pacSocket.onmessage = function(e) {
+		var data = JSON.parse(e.data);
+		var message = data['pac_message'];
+
+		//document.write("In Message:", message)
+		log = document.querySelector('#pac_position').value;
+		//console.log(message)
+		//console.log(message[0])
+		//console.log(message[1])
+
+		if (message[1] == "t") {
+			//print("asdfsdf")
+			console.log("startgame")
+			newgame();
+			main();
+		}
+		else {
+			updateMovement(message[0], message[1])
+		}
+		
+
+		//Add to Logs
+		if (log != " ") {
+			document.querySelector('#pac_position').value = message + "\n" + log;
+		}
+		else {
+			document.querySelector('#pac_position').value = message;
+		}
+	};	
+
+    	//Sends data
+    	document.querySelector('#pac_position_submit').onclick = function(e) {
+    	    var messageInputDom = document.querySelector('#pac_position_input');
+    	    var message = messageInputDom.value;
+    	    //document.write("Out Message:", message)
+
+        	//Sends to other person
+        	pacSocket.send(JSON.stringify({
+        	    'pac_message': message
+        	}));
+
+        	messageInputDom.value = '';
+    	};	
+
+    	//Send Data by Variable
+    	function sendData(e, message) {
+    	    //document.write(message);
+    	    if (isGameStarted && role != "No Role") {
+    	        message2 = role + message
+    	        pacSocket.send(JSON.stringify({
+    	            'pac_message': message2
+    	        }));
+    	    }
+		}
+		
+
+		var timer;
+	
+	var start = false;
+	var pacman = new player();
+	var ghost1 = new player();
+	var ghost2 = new player();
+	var ghost3 = new player();
+	var ghost4 = new player();
+	
+	
+	var moving = false;
+	var powerup = false;
+	var g1collided = false;
+	var g2collided = false;
+	var g3collided = false;
+	var g4collided = false;
+	
+	var pptimer = 0;
+	var spawnTimer = 0;
+	var g1timer = 0;
+	var g2timer = 0;
+	var g3timer = 0;
+	var g4timer = 0;
+	
+	var currentGhost = 1;
+	var offsetConv = 0;
+	var pelletsEaten = 0;
+	var powerpelletsEaten = 0;
+	
+	var g1prev = "red_down";
+	var g2prev = "blue_down";
+	var g3prev = "orange_down";
+	var g4prev = "pink_down";
+	
+	//newgame();
+	//main();
+
+	
+
+	
+
+	function sleep(milliseconds) {
+		var start = new Date().getTime();
+		for (var i = 0; i < 1e7; i++) {
+		if ((new Date().getTime() - start) > milliseconds){
+		break;
+		}
+	}
+	}
+
+	
+	var globalMazeGrid = [
+			"0000000000000000000",
+			"0911c111709111c1170",
+			"0100100010100010010",
+			"0d11e111a1a111e11b0",
+			"0100101000001010010",
+			"0811b081709160d1160",
+			"0000100010100010000",
+			"00001091a1a17010000",
+			"0000101000001010000",
+			"q111e1b0   0d1e111p",
+			"0000101000001010000",
+			"000010d11111b010000",
+			"0000101000001010000",
+			"0911e1b17091b1e1170",
+			"0100100010100010010",
+			"0870d1c1a1a1c1b0960",
+			"0010101000001010100",
+			"09a1608170916081a70",
+			"0100000010100000010",
+			"08111111a1a11111160",
+			"0000000000000000000",
+		];
+		
+	var pelletMazeGrid = [
+			"0000000000000000000",
+			"0pppppppp0pppppppp0",
+			"0b00p000p0p000p00b0",
+			"0ppppppppppppppppp0",
+			"0p00p0p00000p0p00p0",
+			"0pppp0ppp0ppp0pppp0",
+			"0000p000x0x000p0000",
+			"0000p0xxxxxxx0p0000",
+			"0000p0x00000x0p0000",
+			"xxxxpxx0xxx0xxpxxxx",
+			"0000p0x00000x0p0000",
+			"0000p0xxxxxxx0p0000",
+			"0000p0x00000x0p0000",
+			"0pppppppp0pppppppp0",
+			"0p00p000p0p000p00p0",
+			"0bp0ppppppppppp0pb0",
+			"00p0p0p00000p0p0p00",
+			"0pppp0ppp0ppp0pppp0",
+			"0p000000p0p000000p0",
+			"0ppppppppppppppppp0",
+			"0000000000000000000",
+		];
+	
+	
+	
+
+	
+	function colChk(){
+		var pacx;
+		var pacy;
+		var g1x;
+		var g1y;
+		var g2x;
+		var g2y;
+		var g3x;
+		var g3y;
+		var g4x;
+		var g4y;
+	
+		
+		with(pacman){
+		pacx=x;
+		pacy=y;
+		}
+		with(ghost1){
+		g1x=x;
+		g1y=y;
+		}
+		with(ghost2){
+		g2x=x;
+		g2y=y;
+		}
+		with(ghost3){
+		g3x=x;
+		g3y=y;
+		}
+		with(ghost4){
+		g4x=x;
+		g4y=y;
+		}
+		if((pacx == g1x) && (pacy == g1y)){
+			if(powerup){
+				with(ghost1){
+					alive = false;
+					x=10;
+					y=10;
+				}
+			}else{
+			console.log("loss yea");
+			alert("Ghosts win!");
+			}
+		}
+		if((pacx == g2x) && (pacy == g2y)){
+			if(powerup){
+				with(ghost2){
+					alive = false;
+					x=10;
+					y=10;
+				}
+			}else{
+			console.log("loss yea");
+			alert("Ghosts win!");
+			}
+		}
+		if((pacx == g3x) && (pacy == g3y)){
+			if(powerup){
+				with(ghost3){
+					alive = false;
+					x=10;
+					y=10;
+				}
+			}else{
+			console.log("loss yea");
+			alert("Ghosts win!");
+			}
+		}
+		if((pacx == g4x) && (pacy == g4y)){
+			if(powerup){
+				with(ghost4){
+					alive = false;
+					x=10;
+					y=10;
+				}
+			}else{
+			console.log("loss yea");
+			alert("Ghosts win!");
+			}
+		}
+	}
+	
+
+	
+	function moveChar(nm, nmchar){
+
+	if(isPac){
+				//document.onkeydown = checkKey;
+		}else{
+			if(currentGhost == 1){
+				//document.onkeydown = checkKey;
+			}else if(currentGhost == 2){
+				//document.onkeydown = checkKey;
+			}else if(currentGhost == 3){
+				//document.onkeydown = checkKey;
+			}else if(currentGhost == 4){
+				//document.onkeydown = checkKey;
+			}
+		}
+	
+		with(nm) {
+			var collidedvar;
+						if(nm == ghost1){
+							collidedvar = g1collided;
+						}else if(nm == ghost2){
+							collidedvar = g2collided;
+						}else if(nm == ghost3){
+							collidedvar = g3collided;
+						}else if(nm == ghost4){
+							collidedvar = g4collided;
+						}
+			
+			if(offsetConv == 1){
+				if (ibuffer == 1) { //left
+					if(isClear(1, nm)){
+						dir = 1;
+						dx = -1;
+						dy = 0;
+					}
+					else if (!isPac){
+						if(collidedvar){
+							if(isClear(4, nm)){
+							ibuffer = 4;
+							dir = 4;
+							dy = 1;
+							dx = 0;
+						}
+						else if(isClear(2, nm)){
+							ibuffer = 2;
+							dir = 2;
+							dy = -1;
+							dx = 0;
+						}
+						
+						else if(isClear(3, nm)){
+							ibuffer = 3;
+							dir = 3;
+							dx = 1;
+							dy = 0;
+						}
+						
+					}
+					}
+				}
+				else if (ibuffer == 2) { //up
+					if(isClear(2, nm)){
+						dir = 2;
+						dy = -1;
+						dx = 0;
+					}
+					else if (!isPac){
+						if(collidedvar){
+						if(isClear(1, nm)){
+							ibuffer = 1;
+							dir = 1;
+							dx = -1;
+							dy = 0;
+						}
+						else if(isClear(3, nm)){
+							ibuffer = 3;
+							dir = 3;
+							dx = 1;
+							dy = 0;
+						}
+						else if(isClear(4, nm)){
+							ibuffer = 4;
+							dir = 4;
+							dy = 1;
+							dx = 0;
+						}
+					}
+				}
+				}
+				else if (ibuffer == 3) { //right
+					if(isClear(3, nm)){
+						dir = 3;
+						dx = 1;
+						dy = 0;
+					}
+					else if (!isPac){
+						if(collidedvar){
+						if(isClear(4, nm)){
+							ibuffer = 4;
+							dir = 4;
+							dy = 1;
+							dx = 0;
+						}
+						else if(isClear(2, nm)){
+							ibuffer = 2;
+							dir = 2;
+							dy = -1;
+							dx = 0;
+						}
+						
+						else if(isClear(1, nm)){
+							ibuffer = 2;
+							dir = 1;
+							dx = -1;
+							dy = 0;
+						}
+					}
+					}
+				}
+				else if (ibuffer == 4) { //down
+					if(isClear(4, nm)){
+						dir = 4;
+						dy = 1;
+						dx = 0;
+					}
+					else if (!isPac){
+					if(collidedvar){
+							if(isClear(3, nm)){
+								ibuffer = 3;
+								dir = 3;
+								dx = 1;
+								dy = 0;
+							}
+							else if(isClear(1, nm)){
+								ibuffer = 1;
+								dir = 1;
+								dx = -1;
+								dy = 0;
+							}
+							else if(isClear(2, nm)){
+								ibuffer = 2;
+								dir = 2;
+								dy = -1;
+								dx = 0;
+							}
+						}
+					}
+				}
+			}
+
+			g1collided = false;
+			g2collided = false;
+			g3collided = false;
+			g4collided = false;
+			if((ghost1.dx == 0) && (ghost1.dy == 0)){
+				g1collided = true;
+			}
+			if((ghost2.dx == 0) && (ghost2.dy == 0)){
+				g2collided = true;
+			}
+			if((ghost3.dx == 0) && (ghost3.dy == 0)){
+				g3collided = true;
+			}
+			if((ghost4.dx == 0) && (ghost4.dy == 0)){
+				g4collided = true;
+			}
+			
+			drawMap();
+			
+			if(moving){
+				if(offsetConv > 26){
+					oldofx = ofx;
+					oldofy = ofy;
+				}
+				//console.log(nmchar);
+				switch(dx) {
+				case 1:
+					var mazeI = mazeGrid[y].charAt(x);
+					if(mazeI == '0'){
+						dir = 0;
+						dx = 0;
+						dy = 0;
+					}
+					else{
+						//console.log(mazeI);
+						ofx++;
+						if (offsetConv > 26){	
+							x++;
+						}
+					}
+					break;
+				case -1:
+					var mazeI = mazeGrid[y].charAt(x-2);
+					if(mazeI == '0'){
+						dir = 0;
+						dx = 0;
+						dy = 0;
+					}
+					else{
+						ofx--;
+						if (offsetConv > 26){
+							x--;
+						}
+						break;
+					}
+						default:
+						// not supposed to happen
+						
+				}
+				switch(dy) {
+					case 1:
+						var mazeY = globalMazeGrid[y+1].charAt(x-1);
+						if(mazeY == '0'){
+							dir = 0;
+							dx = 0;
+							dy = 0;
+						}
+						else{
+							if (offsetConv > 26){
+								y++;
+							}
+							ofy++;
+
+						}
+						break;
+					case -1:
+						var mazeY = mazeGrid[y-1].charAt(x-1);
+						if(mazeY == '0'){
+							dir = 0;
+							dx = 0;
+							dy = 0;
+						}
+						else{
+							if (offsetConv > 26){
+								y--;
+							}
+							ofy--;
+						}
+						break;
+					default:
+						// not supposed to happen
+				}
+				
+				if(offsetConv > 26){
+				telePac(x, y, nm);
+				}
+					
+			}
+
+		}
+		
+	}
+	
+
+	function teleport(user, entr){
+		with(user){
+			if (((dir == 1) && (entr == 'q')) || (x < 0)){
+				x = 19;
+				telePac(x, y, user);
+			}
+			if (((dir == 3) && (entr == 'p')) || (x > 20)){
+				x = 1;
+				telePac(x, y, user);
+			}
+		}
+	}
+	
+	function isClear(newDir, nm){
+		var isClear = true;
+		with(nm){
+		switch(newDir) {
+				case 1:
+					var mazeI = mazeGrid[y].charAt(x-2);
+					if(mazeI == '0'){
+						isClear = false;
+					}
+					else{
+						isClear = true;
+					}
+					break;
+				case 2:
+					var mazeI = mazeGrid[y-1].charAt(x-1);
+					if(mazeI == '0'){
+						isClear = false;
+					}
+					else{
+						isClear = true;
+					}
+					break;
+				case 3:
+					var mazeI = mazeGrid[y].charAt(x);
+					if(mazeI == '0'){
+						isClear = false;
+					}
+					else{
+						isClear = true;
+					}
+					break;
+				case 4:
+					var mazeI = mazeGrid[y+1].charAt(x-1);
+					if(mazeI == '0'){
+						isClear = false;
+					}
+					else{
+						isClear = true;
+					}
+					break;
+			}
+		}
+		return isClear;
+	}
+	
+	function telePac (row, col, nm) {
+		with(nm){
+
+			ofx = 374+(26*x)+13;
+			ofy = (26*(y))+13;
+			/*
+			switch(dir) {
+				case 1:
+					ofx = 374+(26*x)+13;
+					break;
+				case 2:
+					ofy = (26*(y))+13;
+					break;
+				case 3:
+					ofx = 374+(26*x)+13;
+					break;
+				case 4:
+					ofy = (26*(y))+13;
+					break;
+		}
+		*/
+		
+		//drawCharSpec(ofx, ofy, nm);
+		//drawChar(x, y, nm);
+	}
+	}
+	
+	function drawChar (row, col, nm){
+		drawSprite(374+(26*row), (26*col), nm);
+	}
+	
+	function drawCharSpec (x, y, nm){
+		drawSprite(x-13, y-13, nm);
+	}
+	
+	function drawSprite(x, y, nm){
+		var canvas = document.getElementById("map");
+		var ctx = canvas.getContext("2d");
+		var img = document.getElementById(nm);
+		
+
+		ctx.drawImage(img, x, y);
+
+	}
+	
+	function drawTile(x,y){
+		this.context.fillRect(x * this.tileSize, y * this.tileSize,
+			this.tileSize, this.tileSize);
+	}
+	
+	function drawMap(){
+		var canvas = document.getElementById("map");
+		var ctx = canvas.getContext("2d");
+		var i;
+		var mazeGrid = [
+			"0000000000000000000",
+			"0911c111709111c1170",
+			"0100100010100010010",
+			"0d11e111a1a111e11b0",
+			"0100101000001010010",
+			"0811b081709160d1160",
+			"0000100010100010000",
+			"00001091a1a17010000",
+			"0000101000001010000",
+			"q111e1b0   0d1e111p",
+			"0000101000001010000",
+			"000010d11111b010000",
+			"0000101000001010000",
+			"0911e1b17091b1e1170",
+			"0100100010100010010",
+			"0870d1c1a1a1c1b0960",
+			"0010101000001010100",
+			"09a1608170916081a70",
+			"0100000010100000010",
+			"08111111a1a11111160",
+			"0000000000000000000",
+		];
+		
+		for (i = 0; i < (mazeGrid.length); i++) {
+			var o;
+			for(o = 0; o < 19; o++) {
+				var mazeI = mazeGrid[i].charAt(o);
+				var pmazeI = pelletMazeGrid[i].charAt(o);
+				if (mazeI == '0'){
+					ctx.fillStyle = "#2121DE";
+					ctx.fillRect(400+o*26, i*26, 26, 26);
+				}
+				else if ((mazeI == '1') || (mazeI == '9') || (mazeI == '8') || (mazeI == '6') || (mazeI == '7') || (mazeI == 'a') || (mazeI == 'p') || (mazeI == 'q') || 
+				(mazeI == 'b') || (mazeI == 'c') || (mazeI == 'd') || (mazeI == 'e')){
+					ctx.fillStyle = "#000000";
+					ctx.fillRect(400+o*26, i*26, 26, 26);
+				}
+				if(pmazeI == 'p'){
+					var img = document.getElementById("pellet");
+					ctx.drawImage(img, 400+o*26, i*26);		
+				}
+				else if(pmazeI == 'b'){
+					var img = document.getElementById("powerpellet");
+					ctx.drawImage(img, 400+o*26, i*26);		
+				}
+				
+				
+			}
+			
+			
+		}
+	}
+	
+	function newgame(){
+		start = true;
+		drawMap();
+		resetPac();
+		resetGhost(ghost1, "red_left");
+		resetGhost(ghost2, "blue_left");
+		resetGhost(ghost3, "orange_left");
+		resetGhost(ghost4, "pink_left");
+		moving = true;
+		pelletsEaten = 0;
+		spawnTimer = 0;
+	}	
+	
+	function resetPac() {
+		with(pacman){
+			name = "pacman";
+			drawChar(10, 11, "pacman");
+			x = 10; //647
+			y = 11; //299
+			dx = 0;
+			dy = 0;
+			ofx = 647;
+			oldofx = 647;
+			ofy = 299;
+			oldofy = 299;
+		}
+	}
+	function resetGhost(nm, nm2){
+		with(nm){
+			name = "ghost";
+			drawChar(10, 11, nm2);
+			x = 10; //647
+			y = 7; //299
+			dx = 0;
+			dy = 0;
+			ofx = 647;
+			oldofx = 647;
+			ofy = 195;
+			oldofy = 195;
+		}
+	}
 		
 		
-		</script>
+	
+	
+	function player() {
+			this.name;
+			this.x = 0;
+			this.y = 0;
+			this.dir = 0;
+			this.dx = 0;
+			this.dy = 0;
+			this.ofx = 0;
+			this.ofy = 0;
+			this.ofy = 0;
+			this.oldofy = 0;
+			this.alive = true;
+			this.ibuffer = 0;
+	}
+	
+	/**function checkKey(e) {
+		e = e || window.event;
+		var pname;
+		var pnameChar;
+		if(isPac){
+				pname = pacman;
+				pnameChar = "pacman";
+			}else{
+				if(currentGhost == 1){
+					pname = ghost1;
+					pnameChar = "red_left";
+				}else if(currentGhost == 2){
+					pname = ghost2;
+					pnameChar = "ghost2";
+				}else if(currentGhost == 3){
+					pname = ghost3;
+					pnameChar = "ghost3";
+				}else if(currentGhost == 4){
+					pname = ghost4;
+					pnameChar = "ghost4";
+				}
+			}
+		
+		
+		with(pname){
+			if (e.keyCode == '37') { //left
+				ibuffer = 1;
+			}
+			else if (e.keyCode == '38') { //up
+				ibuffer = 2;
+			}
+			else if (e.keyCode == '39') { //right
+				ibuffer = 3;
+			}
+			else if (e.keyCode == '40') { //down
+				ibuffer = 4;
+			}
+			
+			if(!isPac){
+				if(e.keyCode == '90') { //z
+					currentGhost = 1;
+				}
+				else if(e.keyCode == '88') { //x
+					currentGhost = 2;
+				}
+				else if(e.keyCode == '67') { //c
+					currentGhost = 3;
+				}
+				else if(e.keyCode == '86') { //v
+					currentGhost = 4;
+				}
+			}
+		}
+		
+	}
+	*/
+
+	function updateMovement(role, key) {
+		if (role == 'p') {
+			pname = pacman;
+			var pnameChar = "pacman"
+		}
+		else if (role == 'g') {
+			if(currentGhost == 1){
+				pname = ghost1;
+				pnameChar = "red_left";
+			}else if(currentGhost == 2){
+				pname = ghost2;
+				pnameChar = "ghost2";
+			}else if(currentGhost == 3){
+				pname = ghost3;
+				pnameChar = "ghost3";
+			}else if(currentGhost == 4){
+				pname = ghost4;
+				pnameChar = "ghost4";
+			}
+		}
+
+		with(pname){
+			//console.log(key);
+			if (key == 'l') { //left
+				ibuffer = 1;
+			}
+			else if (key == 'u') { //up
+				ibuffer = 2;
+			}
+			else if (key == 'r') { //right
+				ibuffer = 3;
+			}
+			else if (key == 'd') { //down
+				ibuffer = 4;
+			}
+			
+			if(role == 'g'){
+				if(key == '1') { //z
+					currentGhost = 1;
+				}
+				else if(key == '2') { //x
+					currentGhost = 2;
+				}
+				else if(key == '3') { //c
+					currentGhost = 3;
+				}
+				else if(key == '4') { //v
+					currentGhost = 4;
+				}
+			}
+		}		
+	}
+	
+	function main(){
+
+		if(timer) clearTimeout(timer);
+		
+		
+		colChk();
+		console.log(ghost1.ibuffer);
+		
+		if(spawnTimer < 300){
+			ghost2.alive = false;
+		}
+		else if(spawnTimer == 301){
+			ghost2.alive = true;
+		}
+		if(spawnTimer < 600){
+			ghost3.alive = false;
+		}
+		else if(spawnTimer == 301){
+			ghost3.alive = true;
+		}
+		if(spawnTimer < 900){
+			ghost4.alive = false;
+		}
+		else if(spawnTimer == 301){
+			ghost4.alive = true;
+		}
+		
+		with(pacman){
+				if((y == 9) &&(x <=2)){
+					teleport(pacman, 'q');
+				}
+				else if((y == 9) && (x >= 18)){
+					teleport(pacman, 'p');
+				}
+				
+			}
+			with(ghost1){
+				if((y == 9) &&(x <=2)){
+					teleport(ghost1, 'q');
+				}
+				else if((y == 9) && (x >= 18)){
+					teleport(ghost1, 'p');
+				}
+				
+			}
+			with(ghost2){
+				if((y == 9) &&(x <=2)){
+					teleport(ghost2, 'q');
+				}
+				else if((y == 9) && (x >= 18)){
+					teleport(ghost2, 'p');
+				}
+			}
+			with(ghost3){
+				if((y == 9) &&(x <=2)){
+					teleport(ghost3, 'q');
+				}
+				else if((y == 9) && (x >= 18)){
+					teleport(ghost3, 'p');
+				}
+			}
+			with(ghost4){
+				if((y == 9) &&(x <=2)){
+					teleport(ghost4, 'q');
+				}
+				else if((y == 9) && (x >= 18)){
+					teleport(ghost4, 'p');
+				}
+			}
+			
+			//console.log(ghost1.x);
+		
+			var pchar;
+			if(isPac){
+				pchar = pacman;
+			}else{
+				if(currentGhost == 1){
+					pchar = ghost1;
+				}else if(currentGhost == 2){
+					pchar = ghost2;
+				}else if(currentGhost == 3){
+					pchar = ghost3;
+				}else if(currentGhost == 4){
+					pchar = ghost4;
+				}
+			}
+			
+			moveChar(pacman, "pacman");
+			if(ghost1.alive){
+				moveChar(ghost1, "ghost1");
+			}else{
+				moveChar(ghost1, "blue");
+			}
+			if(ghost2.alive){
+				moveChar(ghost2, "ghost2");
+			}else{
+				moveChar(ghost2, "blue");
+			}
+			if(ghost3.alive){
+				moveChar(ghost3, "ghost3");
+			}else{
+				moveChar(ghost3, "blue");
+			}
+			if(ghost4.alive){
+				moveChar(ghost4, "ghost4");
+			}else{
+				moveChar(ghost4, "blue");
+			}
+			
+			with(pacman){
+				drawCharSpec(ofx, ofy, "pacman");
+			}
+			
+			with(ghost1){
+				if(alive){
+				if(powerup){
+						drawCharSpec(ofx, ofy, "blue");
+					}
+					else{
+						if(dir == 1){
+							drawCharSpec(ofx, ofy, "red_left");
+							g1prev = "red_left";
+						}else if(dir == 2){
+							drawCharSpec(ofx, ofy, "red_up");
+							g1prev = "red_up";
+						}else if(dir == 3){
+							drawCharSpec(ofx, ofy, "red_right");
+							g1prev = "red_right";
+						}else if(dir == 4){
+							drawCharSpec(ofx, ofy, "red_down");
+							g1prev = "red_down";
+						}else{
+							drawCharSpec(ofx, ofy, g1prev);
+						}
+					}
+				}
+			}
+			with(ghost2){
+				if(alive){
+					if(powerup){
+						drawCharSpec(ofx, ofy, "blue");
+					}
+					else{
+						if(dir == 1){
+							drawCharSpec(ofx, ofy, "blue_left");
+							g2prev = "blue_left";
+						}else if(dir == 2){
+							drawCharSpec(ofx, ofy, "blue_up");
+							g2prev = "blue_up";
+						}else if(dir == 3){
+							drawCharSpec(ofx, ofy, "blue_right");
+							g2prev = "blue_right";
+						}else if(dir == 4){
+							drawCharSpec(ofx, ofy, "blue_down");
+							g2prev = "blue_down";
+						}else{
+							drawCharSpec(ofx, ofy, g2prev);
+						}
+					}
+				}
+			}
+			with(ghost3){
+				if(alive){
+					if(powerup){
+						drawCharSpec(ofx, ofy, "blue");
+					}
+					else{
+						if(dir == 1){
+							drawCharSpec(ofx, ofy, "orange_left");
+							g3prev = "orange_left";
+						}else if(dir == 2){
+							drawCharSpec(ofx, ofy, "orange_up");
+							g3prev = "orange_up";
+						}else if(dir == 3){
+							drawCharSpec(ofx, ofy, "orange_right");
+							g3prev = "orange_right";
+						}else if(dir == 4){
+							drawCharSpec(ofx, ofy, "orange_down");
+							g3prev = "orange_down";
+						}else{
+							drawCharSpec(ofx, ofy, g3prev);
+						}
+					}
+				}
+			}
+			with(ghost4){
+				if(alive){
+					if(powerup){
+						drawCharSpec(ofx, ofy, "blue");
+					}
+					else{
+						if(dir == 1){
+							drawCharSpec(ofx, ofy, "pink_left");
+							g4prev = "pink_left";
+						}else if(dir == 2){
+							drawCharSpec(ofx, ofy, "pink_up");
+							g4prev = "pink_up";
+						}else if(dir == 3){
+							drawCharSpec(ofx, ofy, "pink_right");
+							g4prev = "pink_right";
+						}else if(dir == 4){
+							drawCharSpec(ofx, ofy, "pink_down");
+							g4prev = "pink_down";
+						}else{
+							drawCharSpec(ofx, ofy, g4prev);
+						}
+					}
+				}
+			}
+			
+		with(pacman){
+			if(offsetConv > 26){
+				//telePac(x, y, pchar);
+				offsetConv = 0;
+				var mazeI = globalMazeGrid[y].charAt(x-1);
+				var pmazeI = pelletMazeGrid[y].charAt(x-1);
+				console.log(name);
+					if (pmazeI == 'p'){
+
+						pelletsEaten++;
+						pelletMazeGrid[y] = pelletMazeGrid[y].substr(0, x-1) + 'x' + pelletMazeGrid[y].substr(x);
+					}
+					else if(pmazeI == 'b'){
+						pelletsEaten++;
+						powerpelletsEaten++;
+						pelletMazeGrid[y] = pelletMazeGrid[y].substr(0, x-1) + 'x' + pelletMazeGrid[y].substr(x);
+						powerup = true;	
+					}
+				/*
+				if(mazeI == 'q'){
+					teleport(nm, 'q');
+				}
+				else if(mazeI == 'p'){
+					teleport(nm, 'p');
+				}
+				*/
+				//if((y == 9) &&(x <=3)){
+				//	teleport(pchar, 'q');
+				//}
+				//else if((y == 9) && (x >= 17)){
+				//	teleport(pchar, 'p');
+				//}
+				
+			}
+			//telePac(x, y, nm);
+			offsetConv++;
+		}
+			
+			
+			if(pelletsEaten == 151){	//Victory condition
+				console.log("victory!");
+				alert("Pacman Wins!");
+			}
+			//drawChar(x, y, nmchar);
+			
+			
+			if(pptimer > 600){
+				powerup = false;
+				pptimer = 0;
+			}
+			if(powerup){
+				pptimer++;
+			}
+			if(!ghost1.alive){
+				g1timer++;
+			}
+			if(!ghost2.alive){
+				g2timer++;
+			}
+			if(!ghost3.alive){
+				g3timer++;
+			}
+			if(!ghost4.alive){
+				g4timer++;
+			}
+			if(g1timer == 300){
+				g1timer = 0;
+				ghost1.alive = true;
+				resetGhost(ghost1, "red_left");
+			}
+			if(g2timer == 300){
+				g2timer = 0;
+				ghost2.alive = true;
+				resetGhost(ghost2, "blue_left");
+			}
+			if(g3timer == 300){
+				g3timer = 0;
+				ghost3.alive = true;
+				resetGhost(ghost3, "orange_left");
+			}
+			if(g4timer == 300){
+				g4timer = 0;
+				ghost4.alive = true;
+				resetGhost(ghost4, "pink_left");
+			}
+			
+			spawnTimer++;
+			
+		//if (gameOn) {
+			pacTimer= setTimeout("main()", 1);
+		//}
+	}
+	</script>
+        
     </body>
 
 </html>
