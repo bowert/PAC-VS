@@ -306,7 +306,7 @@
     	//Send Data by Variable
     	function sendData(e, message) {
     	    //document.write(message);
-    	    if (isGameStarted && role != "No Role") {
+    	    if (role != "No Role") {
     	        message2 = role + message
     	        pacSocket.send(JSON.stringify({
     	            'pac_message': message2
@@ -538,7 +538,7 @@
 						dx = -1;
 						dy = 0;
 					}
-					else if (!isPac){
+					else if (name != "pacman"){
 						if(collidedvar){
 							if(isClear(4, nm)){
 							ibuffer = 4;
@@ -569,7 +569,7 @@
 						dy = -1;
 						dx = 0;
 					}
-					else if (!isPac){
+					else if (name != "pacman"){
 						if(collidedvar){
 						if(isClear(1, nm)){
 							ibuffer = 1;
@@ -598,7 +598,7 @@
 						dx = 1;
 						dy = 0;
 					}
-					else if (!isPac){
+					else if (name != "pacman"){
 						if(collidedvar){
 						if(isClear(4, nm)){
 							ibuffer = 4;
@@ -628,7 +628,7 @@
 						dy = 1;
 						dx = 0;
 					}
-					else if (!isPac){
+					else if (name != "pacman"){
 					if(collidedvar){
 							if(isClear(3, nm)){
 								ibuffer = 3;
@@ -1099,7 +1099,7 @@
 		
 		
 		colChk();
-		console.log(ghost1.ibuffer);
+		//console.log(ghost1.ibuffer);
 		
 		if(spawnTimer < 300){
 			ghost2.alive = false;
