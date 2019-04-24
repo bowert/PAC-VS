@@ -237,19 +237,19 @@
         	    // right arrow
         	    sendData(e, "r");
         	}
-        	else if (e.keyCode == '49' && role == "g") {
+        	else if (e.keyCode == '90' && role == "g") {
         	    // 1
         	    sendData(e, "1");
         	}
-        	else if (e.keyCode == '50' && role == "g") {
+        	else if (e.keyCode == '88' && role == "g") {
         	    // 2
         	    sendData(e, "2");
         	}
-        	else if (e.keyCode == '51' && role == "g") {
+        	else if (e.keyCode == '67' && role == "g") {
         	    // 3
         	    sendData(e, "3");
         	}
-        	else if (e.keyCode == '52' && role == "g") {
+        	else if (e.keyCode == '86' && role == "g") {
         	    // 4
         	    sendData(e, "4");
         	} 
@@ -262,7 +262,25 @@
 		pacSocket.onmessage = function(e) {
 		var data = JSON.parse(e.data);
 		var message = data['pac_message'];
-
+		var slindex = message.indexOf('/');
+		//console.log(message);
+		var text="";
+		var text2="";
+		for (var i = 2; i < slindex; i++) {
+			text += message[i];
+		}
+		for(var i = slindex+1; i < message.length; i++){
+			text2 += message[i];
+		}
+		var combined = parseInt(text, 10);
+		//console.log(combined);
+		var combined2 = parseInt(text2, 10);
+		if(isPac){
+			ghostsync = combined2;
+		}else{
+			pacsync = combined;
+		}
+		
 		//document.write("In Message:", message)
 		log = document.querySelector('#pac_position').value;
 		//console.log(message)
@@ -307,7 +325,7 @@
     	function sendData(e, message) {
     	    //document.write(message);
     	    if (role != "No Role") {
-    	        message2 = role + message
+    	        message2 = role + message + pacsync + '/' + ghostsync;
     	        pacSocket.send(JSON.stringify({
     	            'pac_message': message2
     	        }));
@@ -324,7 +342,6 @@
 	var ghost3 = new player();
 	var ghost4 = new player();
 	
-	
 	var moving = false;
 	var powerup = false;
 	var g1collided = false;
@@ -332,6 +349,8 @@
 	var g3collided = false;
 	var g4collided = false;
 	
+	var pacsync = 0;
+	var ghostsync = 0;
 	var pptimer = 0;
 	var spawnTimer = 0;
 	var g1timer = 0;
@@ -1390,9 +1409,43 @@
 			}
 			
 			spawnTimer++;
+			pacsync++;
+			ghostsync++;
+			
+			/*
+			do {	
+				pacSocket.onmessage = function(e) {
+					var data = JSON.parse(e.data);
+					var message = data['pac_message'];
+					var text ="";
+					for (var i = 2; i < message.length; i++) {
+						text += message[i];
+					}
+					var combined = parseInt(text, 10);
+					console.log(combined);
+					pacsync = combined;
+					
+					
+				};
+			}
+			while(ghostsync != pacsync);
+			*/
+			
+			if(isPac){
+				//do{
+					//nothing lmao
+				//}
+				//while(pacsync > ghostsync);
+			}
+			else{
+				//do{
+					//nothing lmao
+				//}
+				//while(pacsync < ghostsync);
+			}
 			
 		//if (gameOn) {
-			pacTimer= setTimeout("main()", 1);
+			pacTimer= setTimeout("main()", 7);
 		//}
 	}
 	</script>
