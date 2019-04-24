@@ -214,6 +214,52 @@
 
     	//document.querySelector('#chat-message-input').focus();
 		
+		/*
+			Gets Current Game State
+			- pacman x, y and direction
+			- ghost1 x, y and direction
+			- ghost2 x, y and direction
+			- ghost3 x, y and direction
+			- ghost4 x, y and direction
+
+		*/
+		function getGameState(e) {
+
+			var gameString = ""
+			
+			//Pad zeros to x's and y's to the longest possible size
+			with(pacman){
+				gameString += x;
+				gameString += y;
+				//Need to implement this first
+				gameString += direction;
+			}
+			with(ghost1){
+				gameString += x;
+				gameString += y;
+				//Need to implement this first
+				gameString += direction;
+			}
+			with(ghost2){
+				gameString += x;
+				gameString += y;
+				//Need to implement this first
+				gameString += direction;
+			}
+			with(ghost3){
+				gameString += x;
+				gameString += y;
+				//Need to implement this first
+				gameString += direction;
+			}
+			with(ghost4){
+				gameString += x;
+				gameString += y;
+				//Need to implement this first
+				gameString += direction;
+			}
+			console.log(gameString)
+		}
 
     	//Key is Pressed
     	function keyPress(e) {
