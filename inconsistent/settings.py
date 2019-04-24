@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'pac_vs',
     'game',
     'django.contrib.admin',
@@ -74,7 +75,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pac_vs.wsgi.application'
-
+ASGI_APPLICATION = 'pac_vs.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -131,9 +132,13 @@ STATIC_URL = '/static/'
 TEMPLATE_DIRS = (
 os.path.join(os.path.dirname(__file__), 'templates'),
 )
-#CHANNEL_LAYERS = {
-# "default": {
-# "BACKEND": "asgiref.inmemory.ChannelLayer",
-# "ROUTING": "channels_pac_vs.routing.channel_routing",
-# },
-#}
+
+CHANNEL_LAYERS = {
+    "default": {
+    "BACKEND": "asgiref.inmemory.ChannelLayer",
+    'CONFIG': {
+        "hosts": [('127.0.0.1', 10000)]
+    }
+    #"ROUTING": "channels_pac_vs.routing.channel_routing",
+ },
+}
