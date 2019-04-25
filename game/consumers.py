@@ -50,6 +50,21 @@ class PacConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'pac_%s' % self.room_name
 
+        servers = Server.objects.filter(serverName=self.room_name).first()
+        print("Num of Players:", servers.numOfPlayers)
+
+        if (servers.numOfPlayers >= 2):
+            print("No buddy")
+            servers.numOfPlayers += 1
+            servers.save()
+            #return home
+            #return redirect('/home')
+            return
+        else:
+            servers.numOfPlayers += 1
+            servers.save()
+
+
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -63,7 +78,12 @@ class PacConsumer(AsyncWebsocketConsumer):
         print("Oh yeah!")
         servers = Server.objects.filter(serverName=self.room_name).first()
         servers.numOfPlayers -= 1
-        servers.save()
+        if (servers.numOfPlayers == 0):
+            servers.delete()
+        else:
+            servers.save()
+
+
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
