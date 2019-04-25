@@ -30,7 +30,7 @@ STATICFILES_DIRS = [ # For static files not particular to any app.
 os.path.join(PROJECT_DIR, 'MIN/static'),
 ]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['67.205.157.41', 'pacvs.tk']
 
 # Application definition
 
