@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.utils.safestring import mark_safe
 from . forms import CreateRoomForm
-from . models import Server
+from . models import Server, Stats
 import json
 
 
@@ -50,7 +50,14 @@ def disconnected(request):
     return render(request, 'disconnected.html')
 
 def stats(request):
-    return render(request, 'stats.html')
+    stat = Stats.objects.filter(id=1).first()
+    if(stat == None):
+        stat = Stats.objects.create()
+        stat.save()
+
+    pacWin = stat.pacVictories / (stat.ghostVictories + stat.pacVictories)
+    ghostWin = stat.ghostVictories / (stat.pacVictories + stat.ghostVictories)
+    return render(request, 'stats.html',{'stats': stat, 'pacWinRate': pacWin, 'ghostWinRate': ghostWin,})
 
 def game(request, room_name):
     servers = Server.objects.filter(serverName=room_name).first()

@@ -14,8 +14,8 @@ class Server(models.Model):
     numOfPlayers = models.PositiveIntegerField(default=1)
 
 class Stats(models.Model):
-    pacVictories = models.PositiveIntegerField(default=0)
-    ghostVictories = models.PositiveIntegerField(default=0)
+    pacVictories = models.PositiveIntegerField(default=1)
+    ghostVictories = models.PositiveIntegerField(default=1)
     pellets = models.BigIntegerField(default=0, validators=[MinValueValidator(0)]) # number of pellets eaten
     PP = models.PositiveIntegerField(default=0) # number of Power Pellets eaten
 

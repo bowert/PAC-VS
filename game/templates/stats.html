@@ -8,11 +8,10 @@
 	<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" />
     <body>
 		<h1 style="color:white;">GLOBAL PAC-STATS</h1>
-		<p style="color:white;">PAC-MAN Winrate: </p>
-		<p style="color:white;">Ghost Winrate: </p>
-        <p style="color:white;">Pellets Eaten: </p>
-		<p style="color:white;">Power Pellets Eaten:</p>
-		<p style="color:white;">Pellets Eaten: </p>
+		<p style="color:white;">PAC-MAN Winrate: {{ pacWinRate }}</p>
+		<p style="color:white;">Ghost Winrate: {{ ghostWinRate }}</p>
+        <p style="color:white;">Pellets Eaten: {{ stats.pellets }}</p>
+		<p style="color:white;">Power Pellets Eaten: {{ stats.PP }}</p>
     </body>
 
 </html>
