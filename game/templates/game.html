@@ -805,7 +805,7 @@
 			"0000000000000000000",
 		];
 	
-	
+	var isInWin = false;
 	
 
 	
@@ -821,7 +821,6 @@
 		var g4x;
 		var g4y;
 	
-		
 		with(pacman){
 		pacx=x;
 		pacy=y;
@@ -842,6 +841,7 @@
 		g4x=x;
 		g4y=y;
 		}
+		var win = false;
 		if((pacx == g1x) && (pacy == g1y)){
 			if(powerup){
 				with(ghost1){
@@ -852,15 +852,11 @@
 			}else{
 			console.log("loss yea");
 
-			alert("Ghosts win!");
-			if (isPac) {
-				window.location.href = "/home";
+			//alert("Ghosts win!");
+			win = true;
+			
 			}
-			else {
-				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
-			}
-			return;
-			}
+			
 		}
 		if((pacx == g2x) && (pacy == g2y)){
 			if(powerup){
@@ -871,14 +867,8 @@
 				}
 			}else{
 			console.log("loss yea");
-			alert("Ghosts win!");
-			if (isPac) {
-				window.location.href = "/home";
-			}
-			else {
-				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
-			}
-			return;
+			//alert("Ghosts win!");
+			win = true;
 			}
 		}
 		if((pacx == g3x) && (pacy == g3y)){
@@ -890,14 +880,8 @@
 				}
 			}else{
 			console.log("loss yea");
-			alert("Ghosts win!");
-			if (isPac) {
-				window.location.href = "/home";
-			}
-			else {
-				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
-			}
-			return;
+			//alert("Ghosts win!");
+			win = true;
 			}
 		}
 		if((pacx == g4x) && (pacy == g4y)){
@@ -909,20 +893,22 @@
 				}
 			}else{
 			console.log("loss yea");
-			alert("Ghosts win!");
-			if (isPac) {
-				window.location.href = "/home";
-			}
-			else {
-				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
-			}
-			return;
+			//alert("Ghosts win!");
+			win = true;
+			
 			}
 		}
+		if (win && !isInWin) {
+			isInWin = true;
+			if (isPac) {
+				window.location.replace("/lose");
+			}
+			else {
+				window.location.replace("/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts");
+			}			
+		}
 	}
-	
 
-	
 	function moveChar(nm, nmchar){
 
 	if(isPac){
@@ -1860,12 +1846,15 @@
 			
 			if(pelletsEaten == 151){	//Victory condition
 				console.log("victory!");
-				alert("Pacman Wins!");
-				if (!isPac) {
-					window.location.href = "/home";
-				}
-				else {
-					window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/pacman";
+				//alert("Pacman Wins!");
+				if (!isInWin) {
+					isInWin = true;
+					if (!isPac) {
+						window.location.href = "/lose";
+					}
+					else {
+						window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/pacman";
+					}
 				}
 				return;
 			}
@@ -1944,10 +1933,11 @@
 			
 			//console.log(pacsync);
 			//console.log(ghostsync);
-			
+
 		//if (gameOn) {
 			pacTimer= setTimeout("main()", 17);
 		//}
+
 			if(isPac){
 				if(updatetimer > 160){
 					sendData(e,'$');
