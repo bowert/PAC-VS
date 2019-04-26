@@ -261,7 +261,29 @@
 
 		pacSocket.onmessage = function(e) {
 		var data = JSON.parse(e.data);
-		var message = data['pac_message'];
+		var message = data.pac_message;
+		var newgs = data.pac_megamessage;	
+		//var pacx
+		console.log(newgs);					
+		var text="";
+		//console.log(newgs.tpac);
+		/*
+		if(message[2] == '~'){
+			//console.log(message.length);
+			for(var i = 3; i < message.length; i++){
+				text += message[i];
+				//console.log(message[i]);
+			}
+		}
+		*/
+		
+		if(!isPac){
+			//Object.assign(text, gamestate);
+			pacgs = newgs;
+			//console.log(text);
+		}
+		
+		/*
 		var slindex = message.indexOf('/');
 		//console.log(message);
 		var text="";
@@ -280,6 +302,7 @@
 		}else{
 			pacsync = combined;
 		}
+		*/
 		
 		//document.write("In Message:", message)
 		log = document.querySelector('#pac_position').value;
@@ -325,12 +348,25 @@
     	function sendData(e, message) {
     	    //document.write(message);
     	    if (role != "No Role") {
-    	        message2 = role + message + pacsync + '/' + ghostsync;
-    	        pacSocket.send(JSON.stringify({
-    	            'pac_message': message2
+    	        message2 = role + message;
+				message3 = "fefefef"
+				if(isPac){
+					pacSocket.send(JSON.stringify({
+						'pac_megamessage': message3,
+						'pac_message': message2,
+						'pac_ispac': "t",
+						'pac_x': pacman.x,
+						'pac_y': pacman.y, 
+        	}));
+				}
+				else{
+					pacSocket.send(JSON.stringify({
+					'pac_message': message2,
+    	            'pac_ispac': "f",
     	        }));
+				}
+				}
     	    }
-		}
 		
 
 		var timer;
@@ -368,21 +404,10 @@
 	var g3prev = "orange_down";
 	var g4prev = "pink_down";
 	
+	var pacgs = new gamestate();
+	
 	//newgame();
 	//main();
-
-	
-
-	
-
-	function sleep(milliseconds) {
-		var start = new Date().getTime();
-		for (var i = 0; i < 1e7; i++) {
-		if ((new Date().getTime() - start) > milliseconds){
-		break;
-		}
-	}
-	}
 
 	
 	var globalMazeGrid = [
@@ -984,8 +1009,97 @@
 		}
 	}
 		
-		
+	function gamestate() {
+			this.tpac = new player;
+			this.tg1 = new player;
+			this.tg2 = new player;
+			this.tg3 = new player;
+			this.tg4 = new player;
+			this.tpellets = pelletMazeGrid;
+			this.tpowerup = false;
+			this.tg1collided = false;
+			this.tg2collided = false;
+			this.tg3collided = false;
+			this.tg4collided = false;
+			
+			this.tpptimer = 0;
+			this.tg1timer = 0;
+			this.tg2timer = 0;
+			this.tg3timer = 0;
+			this.tg4timer = 0;
+			
+			this.tcurrentGhost = 1;
+			this.toffsetConv = 0;
+			this.tpelletsEaten = 0;
+			this.tpowerpelletsEaten = 0;
+			
+			var tg1prev = "red_down";
+			var tg2prev = "blue_down";
+			var tg3prev = "orange_down";
+			var tg4prev = "pink_down";
+	}
 	
+	function updategs(gs){
+		with(gs){
+		tpac = pacman;
+		tg1 = ghost1;
+		tg2 = ghost2;
+		tg3 = ghost3;
+		tg4 = ghost4;
+		tpellets = pelletMazeGrid;
+		tpowerup = powerup;
+		tg1collided = g1collided;
+		tg2collided = g2collided;
+		tg3collided = g3collided;
+		tg4collided = g4collided;
+		tpptimer = pptimer;
+		tg1timer = g1timer;
+		tg2timer = g2timer;
+		tg3timer = g3timer;
+		tg4timer = g4timer;
+		
+		tcurrentGhost = currentGhost;
+		toffsetConv = offsetConv;
+		tpelletsEaten = pelletsEaten;
+		tpowerpelletsEaten = powerpelletsEaten;
+		tg1prev = g1prev;
+		tg2prev = g2prev;
+		tg3prev = g3prev;
+		tg4prev = g4prev;
+		
+	}
+	}
+	
+	function updaterealgs(gs){
+		with(gs){
+		pacman = tpac;
+		ghost1 = tg1;
+		ghost2 = tg2;
+		ghost3 = tg3;
+		ghost4 = tg4;
+		pelletMazeGrid = tpellets;
+		powerup = tpowerup;
+		g1collided = tg1collided;
+		g2collided = tg2collided;
+		g3collided = tg3collided;
+		g4collided = tg4collided;
+		pptimer = tpptimer;
+		g1timer = tg1timer;
+		g2timer = tg2timer;
+		g3timer = tg3timer;
+		g4timer = tg4timer;
+		
+		currentGhost = tcurrentGhost;
+		offsetConv = toffsetConv;
+		pelletsEaten = tpelletsEaten;
+		powerpelletsEaten = tpowerpelletsEaten;
+		g1prev = tg1prev;
+		g2prev = tg2prev;
+		g3prev = tg3prev;
+		g4prev = tg4prev;
+		
+	}
+	}
 	
 	function player() {
 			this.name;
@@ -996,7 +1110,7 @@
 			this.dy = 0;
 			this.ofx = 0;
 			this.ofy = 0;
-			this.ofy = 0;
+			this.oldofx = 0;
 			this.oldofy = 0;
 			this.alive = true;
 			this.ibuffer = 0;
@@ -1115,7 +1229,10 @@
 	function main(){
 
 		if(timer) clearTimeout(timer);
-		
+		if(isPac){
+			updategs(pacgs);
+		}
+
 		
 		colChk();
 		//console.log(ghost1.ibuffer);
@@ -1328,7 +1445,6 @@
 				offsetConv = 0;
 				var mazeI = globalMazeGrid[y].charAt(x-1);
 				var pmazeI = pelletMazeGrid[y].charAt(x-1);
-				console.log(name);
 					if (pmazeI == 'p'){
 
 						pelletsEaten++;
@@ -1431,23 +1547,48 @@
 			while(ghostsync != pacsync);
 			*/
 			
-			if(isPac){
-				//do{
-					//nothing lmao
-				//}
-				//while(pacsync > ghostsync);
-			}
-			else{
-				//do{
-					//nothing lmao
-				//}
-				//while(pacsync < ghostsync);
-			}
+			//if(isPac){
+			//	chkSyncPac(pacsync, ghostsync);
+			//}
+			//else{
+			//	chkSyncPac(pacsync, ghostsync);
+			//}
+			
+			//console.log(pacsync);
+			//console.log(ghostsync);
 			
 		//if (gameOn) {
 			pacTimer= setTimeout("main()", 7);
 		//}
+		
+	if(isPac){
+		updategs(pacgs);
 	}
+	else{
+		updaterealgs(pacgs);
+	}
+	}
+	/*
+	function chkSyncPac(pacsync, ghostsync){
+		if(pacsync > ghostsync){
+			pacTimer = setTimeout("chkSyncPac()");
+		}
+		else{
+			return;
+		}
+	}
+	
+	function chkSyncGst(pacsync, ghostsync){
+		if(pacsync < ghostsync){
+			pagTimer = setTimeout("chkSyncGst()");
+		}
+		else{
+			return;
+		}
+	}
+	*/
+	
+	
 	</script>
         
     </body>
