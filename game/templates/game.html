@@ -280,6 +280,8 @@
 		var xnupacy;
 		var nupacdir = "";
 		var xnupacdir;
+		var nupacofx = "";
+		var nupacofy = "";
 		
 		var nug1x = "";
 		var xnug1x; 
@@ -287,6 +289,8 @@
 		var xnug1y;
 		var nug1dir = "";
 		var xnug1dir;
+		var nug1ofx = "";
+		var nug1ofy = "";
 		
 		var nug2x = "";
 		var xnug2x;
@@ -294,6 +298,8 @@
 		var xnug2y;
 		var nug2dir = "";
 		var xnug2dir;
+		var nug2ofx = "";
+		var nug2ofy = "";
 		
 		var nug3x = "";
 		var xnug3x;
@@ -301,14 +307,18 @@
 		var xnug3y;
 		var nug3dir = "";
 		var xnug3dir;
-		
+		var nug3ofx = "";
+		var nug3ofy = "";
+
 		var nug4x = "";
 		var xnug4x;
 		var nug4y = "";
 		var xnug4y;
 		var nug4dir = "";
 		var xnug4dir;
-		
+		var nug4ofx = "";
+		var nug4ofy = "";
+
 		var lpowerup;
 		var lpptimer;
 
@@ -350,6 +360,16 @@
 				counter++;
 			}
 			counter++;
+
+			temp = getNext(message, counter);
+			nupacofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nupacofy = temp[0];
+			counter = temp[1] + 1;
+			
+
 			while((message[counter] != '~') && (counter < message.length)){
 				nug1x += message[counter];
 				counter++;
@@ -367,6 +387,16 @@
 			counter++;
 
 			temp = getNext(message, counter);
+			nug1ofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nug1ofy = temp[0];
+			counter = temp[1] + 1;
+
+
+
+			temp = getNext(message, counter);
 			nug2x = temp[0];
 			counter = temp[1] + 1; 
 
@@ -377,6 +407,16 @@
 			temp = getNext(message, counter);
 			nug2dir = temp[0];
 			counter = temp[1] + 1;			
+
+			temp = getNext(message, counter);
+			nug2ofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nug2ofy = temp[0];
+			counter = temp[1] + 1;
+
+
 
 			temp = getNext(message, counter);
 			nug3x = temp[0];
@@ -391,6 +431,15 @@
 			counter = temp[1] + 1;
 
 			temp = getNext(message, counter);
+			nug3ofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nug3ofy = temp[0];
+			counter = temp[1] + 1;
+
+
+			temp = getNext(message, counter);
 			nug4x = temp[0];
 			counter = temp[1] + 1; 
 
@@ -400,6 +449,14 @@
 
 			temp = getNext(message, counter);
 			nug4dir = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nug4ofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nug4ofy = temp[0];
 			counter = temp[1] + 1;
 
 			
@@ -618,11 +675,11 @@
 					pacSocket.send(JSON.stringify({
 						'pac_message': message2
 						+'~'+powerup+'~'+pptimer
-						+'~'+pacman.x+'~'+pacman.y+'~'+pacman.dir
-						+'~'+ghost1.x+'~'+ghost1.y+'~'+ghost1.dir
-						+'~'+ghost2.x+'~'+ghost2.y+'~'+ghost2.dir
-						+'~'+ghost3.x+'~'+ghost3.y+'~'+ghost3.dir
-						+'~'+ghost4.x+'~'+ghost4.y+'~'+ghost4.dir
+						+'~'+pacman.x+'~'+pacman.y+'~'+pacman.dir+'~'+pacman.ofx+'~'+pacman.ofy
+						+'~'+ghost1.x+'~'+ghost1.y+'~'+ghost1.dir+'~'+ghost1.ofx+'~'+ghost1.ofy
+						+'~'+ghost2.x+'~'+ghost2.y+'~'+ghost2.dir+'~'+ghost2.ofx+'~'+ghost2.ofy
+						+'~'+ghost3.x+'~'+ghost3.y+'~'+ghost3.dir+'~'+ghost3.ofx+'~'+ghost3.ofy
+						+'~'+ghost4.x+'~'+ghost4.y+'~'+ghost4.dir+'~'+ghost4.ofx+'~'+ghost4.ofy
 						+'~'+pelletMazeGrid[0]
 						+'~'+pelletMazeGrid[1]
 						+'~'+pelletMazeGrid[2]
