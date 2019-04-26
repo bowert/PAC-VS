@@ -215,6 +215,7 @@
     	//document.querySelector('#chat-message-input').focus();
 		
 		function getNext(message, counter){
+			var item = ""
 			while((message[counter] != '~') && (counter < message.length)){
 				item += message[counter];
 				counter++;
