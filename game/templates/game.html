@@ -88,6 +88,10 @@
 	<div style="display:none;">
 	<img id="blue" src="{% static 'images/blue.png' %}" width="300" height="227">
 	</div>
+	
+	<div style="display:none;">
+	<img id="blueselected" src="{% static 'images/blueselected.png' %}" width="300" height="227">
+	</div>
 
     <head>
 		<style>
@@ -1721,7 +1725,12 @@
 			with(ghost1){
 				if(alive){
 				if(powerup){
-						drawCharSpec(ofx, ofy, "blue");
+						if(currentGhost == 1){
+							drawCharSpec(ofx, ofy, "blueselected");
+						}
+						else{
+							drawCharSpec(ofx, ofy, "blue");
+						}
 					}
 					else{
 						if(dir == 1){
@@ -1745,7 +1754,12 @@
 			with(ghost2){
 				if(alive){
 					if(powerup){
-						drawCharSpec(ofx, ofy, "blue");
+						if(currentGhost == 2){
+							drawCharSpec(ofx, ofy, "blueselected");
+						}
+						else{
+							drawCharSpec(ofx, ofy, "blue");
+						}
 					}
 					else{
 						if(dir == 1){
@@ -1769,7 +1783,12 @@
 			with(ghost3){
 				if(alive){
 					if(powerup){
-						drawCharSpec(ofx, ofy, "blue");
+						if(currentGhost == 3){
+							drawCharSpec(ofx, ofy, "blueselected");
+						}
+						else{
+							drawCharSpec(ofx, ofy, "blue");
+						}
 					}
 					else{
 						if(dir == 1){
@@ -1793,7 +1812,12 @@
 			with(ghost4){
 				if(alive){
 					if(powerup){
-						drawCharSpec(ofx, ofy, "blue");
+						if(currentGhost == 4){
+							drawCharSpec(ofx, ofy, "blueselected");
+						}
+						else{
+							drawCharSpec(ofx, ofy, "blue");
+						}
 					}
 					else{
 						if(dir == 1){

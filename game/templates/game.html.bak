@@ -88,6 +88,10 @@
 	<div style="display:none;">
 	<img id="blue" src="{% static 'images/blue.png' %}" width="300" height="227">
 	</div>
+	
+	<div style="display:none;">
+	<img id="blueselected" src="{% static 'images/blueselected.png' %}" width="300" height="227">
+	</div>
 
     <head>
 		<style>
@@ -104,9 +108,12 @@
 			<br>
 		
 			<div class="row" style="padding-left:2%;">
-					<input id="setPac" type="button" value="Select Pacman" style="width:20%">
-				
-						<input id="setGhost" type="button" value="Select Ghosts" style="width:20%">
+				<div id="setPacBool" class="col-sm-2" style="padding-top: 1%">
+					<input id="setPac" type="button" value="Select Pacman" style="width:50%">
+				</div>
+				<div id="setGhostBool" class="col-sm-2">
+						<input id="setGhost" type="button" value="Select Ghosts" style="width:50%">
+				</div>
 				<div class="col-sm-1" style="display:none;">
 						<p>Role: </p>
 				</div>
@@ -187,13 +194,21 @@
     	document.querySelector('#setPac').onclick = function(e) {
     	    role = "p";
 			isPac = true;
-    	    document.querySelector('#pac_role').innerHTML = role;
+    	    //document.querySelector('#pac_role').innerHTML = role;
+			var setPac = document.getElementById("setPacBool");
+			setPac.style.display = "none";
+			var setGhost = document.getElementById('setGhostBool');
+			setGhost.style.display = "none";
     	}
 
     	document.querySelector('#setGhost').onclick = function() {
-    	role = "g";
-		isPac = false;
-    	document.querySelector('#pac_role').innerHTML = role;
+    		role = "g";
+			isPac = false;
+    		//document.querySelector('#pac_role').innerHTML = role;
+			var setPac = document.getElementById("setPacBool");
+			setPac.style.display = "none";
+			var setGhost = document.getElementById('setGhostBool');
+			setGhost.style.display = "none";
     	}
 		
 
@@ -1710,7 +1725,12 @@
 			with(ghost1){
 				if(alive){
 				if(powerup){
-						drawCharSpec(ofx, ofy, "blue");
+						if(currentGhost == 1){
+							drawCharSpec(ofx, ofy, "blueselected");
+						}
+						else{
+							drawCharSpec(ofx, ofy, "blue");
+						}
 					}
 					else{
 						if(dir == 1){
@@ -1734,7 +1754,12 @@
 			with(ghost2){
 				if(alive){
 					if(powerup){
-						drawCharSpec(ofx, ofy, "blue");
+						if(currentGhost == 2){
+							drawCharSpec(ofx, ofy, "blueselected");
+						}
+						else{
+							drawCharSpec(ofx, ofy, "blue");
+						}
 					}
 					else{
 						if(dir == 1){
@@ -1758,7 +1783,12 @@
 			with(ghost3){
 				if(alive){
 					if(powerup){
-						drawCharSpec(ofx, ofy, "blue");
+						if(currentGhost == 3){
+							drawCharSpec(ofx, ofy, "blueselected");
+						}
+						else{
+							drawCharSpec(ofx, ofy, "blue");
+						}
 					}
 					else{
 						if(dir == 1){
@@ -1936,7 +1966,7 @@
 		//}
 
 			if(isPac){
-				if(updatetimer > 40){
+				if(updatetimer > 160){
 					sendData(e,'$');
 					updatetimer = 0;
 				}
