@@ -321,7 +321,7 @@
 
 		var lpowerup;
 		var lpptimer;
-
+		var lpelletsEaten;
 
 		if(message[0] != '$'){
 			//sendData(e, "$");
@@ -342,6 +342,10 @@
 
 			temp = getNext(message, counter);
 			lpptimer = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			lpelletsEaten = temp[0];
 			counter = temp[1] + 1;
 
 			while((message[counter] != '~') && (counter < message.length)){
@@ -471,7 +475,8 @@
 					powerup = false;
 				}
 				pptimer = parseInt(lpptimer, 10);
-				
+				pelletsEaten = parseInt(lpelletsEaten, 10);
+
 				pacman.x = xnupacx;
 				pacman.y = xnupacy;
 				pacman.dir = xnupacdir;
@@ -492,6 +497,7 @@
 				xnug1x = parseInt(nug1x, 10);
 				xnug1y = parseInt(nug1y, 10);
 				xnug1dir = parseInt(nug1dir, 10);
+
 				ghost1.x = xnug1x;
 				ghost1.y = xnug1y;
 				ghost1.dir = xnug1dir;
@@ -674,7 +680,7 @@
 				if(isPac){
 					pacSocket.send(JSON.stringify({
 						'pac_message': message2
-						+'~'+powerup+'~'+pptimer
+						+'~'+powerup+'~'+pptimer+'~'+pelletsEaten
 						+'~'+pacman.x+'~'+pacman.y+'~'+pacman.dir+'~'+pacman.ofx+'~'+pacman.ofy
 						+'~'+ghost1.x+'~'+ghost1.y+'~'+ghost1.dir+'~'+ghost1.ofx+'~'+ghost1.ofy
 						+'~'+ghost2.x+'~'+ghost2.y+'~'+ghost2.dir+'~'+ghost2.ofx+'~'+ghost2.ofy
