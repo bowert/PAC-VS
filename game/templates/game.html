@@ -1623,7 +1623,6 @@
 	}
 	
 	function main(e){
-
 		if(timer) clearTimeout(timer);
 		if(isPac){
 			//updategs(pacgs);
@@ -1867,37 +1866,8 @@
 				//}
 				
 			}
-			/*
-			var d = new Date();
-			var speed = 100/1000;
-			time = d.getMilliseconds();
-			if(time < lastTime){
-				time += 1000;
-			}
-
-			if(lastTime === 0){
-				lastTime = time;
-			}
-			*/
-			else{
-				//telePac(x, y, nm);
-				offsetConv++;
-				/*
-				offsetConv += speed * (time-lastTime);
-				console.log("time");
-				console.log(time);
-				console.log("lasttime");
-				console.log(lastTime);
-				console.log("off");
-				console.log(offsetConv);
-				if(time >= 1000){
-					lastTime = time - 1000;
-				}
-				else{
-					lastTime = time;
-				}
-				*/
-			}
+			//telePac(x, y, nm);
+			offsetConv++;
 		}
 			
 			
