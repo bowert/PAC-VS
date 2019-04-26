@@ -43,7 +43,7 @@
                 </div>
             </div>
 			
-			<div style="padding-left: 0%; padding-top: 2%" class="row">
+			<div style="padding-left: 0%; padding-top: 3%" class="row">
                    <img src="{% static 'images/tutorial.png' %}" alt="logo" class="img-responsive center-block" />
 
             </div>
