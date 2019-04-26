@@ -33,4 +33,6 @@ urlpatterns = [
     path('test/<room_name>', views.test, name='test'),
     path('pac_test/<room_name>', views.pac_test, name='pac_test'),
     path('win/<pellets>/<power>/<win>', views.win, name='win'),
+    path('lose/', views.lose, name='lose'),
+    path('winner/', views.winner, name='winner'),
 ]

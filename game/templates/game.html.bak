@@ -104,34 +104,33 @@
 			<br>
 		
 			<div class="row" style="padding-left:2%;">
-				<div class="col-sm-2">
-					<input id="setPac" type="button" value="Select Pacman" style="width:100%">
+				<div class="col-sm-2" style="padding-top: 1%">
+					<input id="setPac" type="button" value="Select Pacman" style="width:50%">
 				</div>
 				<div class="col-sm-2">
-						<input id="setGhost" type="button" value="Select Ghosts" style="width:100%">
+						<input id="setGhost" type="button" value="Select Ghosts" style="width:50%">
 				</div>
-				<div class="col-sm-1">
+				<div class="col-sm-1" style="display:none;">
 						<p>Role: </p>
 				</div>
-				<div class="col-sm-1">
+				<div class="col-sm-1" style="display:none;">
 						<p id="pac_role">No Role</p>
 				</div>
 			</div>
 		
 			<br>
 		
+			
 			<div class="row" style="padding-left: 5%;">
 				<input id="startGame" type="button" value="Start Game" style="width: 20%">
+				<!---
 				<div style="padding-left: 2%;">
 					<input id="pac_position_input" type="text">
 					<input id="pac_position_submit" type="button" value="Send"/>
 				</div>
+				-->
 			</div>
-		
-			<br>
-		
-			<p>Logs:</p>
-			<textarea readonly id="pac_position" cols="20" rows="14"> </textarea>
+			
 	<!--<script type="text/javascript" src="{% static 'js/game.js' %}"></script>-->
 	<script>
 
@@ -265,7 +264,7 @@
         	} 
         	else if (e.keyCode == '13') {
         	    // Enter
-        	    document.querySelector('#pac_position_submit').click();
+        	    //document.querySelector('#pac_position_submit').click();
         	}
     	}	
 
@@ -281,6 +280,8 @@
 		var xnupacy;
 		var nupacdir = "";
 		var xnupacdir;
+		var nupacofx = "";
+		var nupacofy = "";
 		
 		var nug1x = "";
 		var xnug1x; 
@@ -288,6 +289,8 @@
 		var xnug1y;
 		var nug1dir = "";
 		var xnug1dir;
+		var nug1ofx = "";
+		var nug1ofy = "";
 		
 		var nug2x = "";
 		var xnug2x;
@@ -295,6 +298,8 @@
 		var xnug2y;
 		var nug2dir = "";
 		var xnug2dir;
+		var nug2ofx = "";
+		var nug2ofy = "";
 		
 		var nug3x = "";
 		var xnug3x;
@@ -302,14 +307,22 @@
 		var xnug3y;
 		var nug3dir = "";
 		var xnug3dir;
-		
+		var nug3ofx = "";
+		var nug3ofy = "";
+
 		var nug4x = "";
 		var xnug4x;
 		var nug4y = "";
 		var xnug4y;
 		var nug4dir = "";
 		var xnug4dir;
-		
+		var nug4ofx = "";
+		var nug4ofy = "";
+
+		var lpowerup;
+		var lpptimer;
+
+
 		if(message[0] != '$'){
 			//sendData(e, "$");
 			//return;
@@ -322,6 +335,15 @@
 			if(message[2] == '~'){
 			//console.log(message.length);
 			var counter = 3;
+
+			temp = getNext(message, counter);
+			lpowerup = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			lpptimer = temp[0];
+			counter = temp[1] + 1;
+
 			while((message[counter] != '~') && (counter < message.length)){
 				nupacx += message[counter];
 				counter++;
@@ -338,6 +360,16 @@
 				counter++;
 			}
 			counter++;
+
+			temp = getNext(message, counter);
+			nupacofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nupacofy = temp[0];
+			counter = temp[1] + 1;
+			
+
 			while((message[counter] != '~') && (counter < message.length)){
 				nug1x += message[counter];
 				counter++;
@@ -354,46 +386,91 @@
 			}
 			counter++;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
+			nug1ofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nug1ofy = temp[0];
+			counter = temp[1] + 1;
+
+
+
+			temp = getNext(message, counter);
 			nug2x = temp[0];
 			counter = temp[1] + 1; 
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug2y = temp[0];
 			counter = temp[1] + 1;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug2dir = temp[0];
 			counter = temp[1] + 1;			
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
+			nug2ofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nug2ofy = temp[0];
+			counter = temp[1] + 1;
+
+
+
+			temp = getNext(message, counter);
 			nug3x = temp[0];
 			counter = temp[1] + 1; 
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug3y = temp[0];
 			counter = temp[1] + 1;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug3dir = temp[0];
 			counter = temp[1] + 1;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
+			nug3ofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nug3ofy = temp[0];
+			counter = temp[1] + 1;
+
+
+			temp = getNext(message, counter);
 			nug4x = temp[0];
 			counter = temp[1] + 1; 
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug4y = temp[0];
 			counter = temp[1] + 1;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug4dir = temp[0];
 			counter = temp[1] + 1;
 
+			temp = getNext(message, counter);
+			nug4ofx = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			nug4ofy = temp[0];
+			counter = temp[1] + 1;
+
+			
 			if(!isPac){
 				xnupacx = parseInt(nupacx, 10);
 				xnupacy = parseInt(nupacy, 10);
 				xnupacdir = parseInt(nupacdir, 10);
+				if(lpowerup === 'true'){
+					powerup = true;
+				}
+				else{
+					powerup = false;
+				}
+				pptimer = parseInt(lpptimer, 10);
 				
 				pacman.x = xnupacx;
 				pacman.y = xnupacy;
@@ -507,6 +584,14 @@
 					ghost4.dx = 0;
 					ghost4.dy = 0;
 				}
+
+				for(var i=0; i<pelletMazeGrid.length; i++){
+					temp = getNext(message, counter);
+					pelletMazeGrid[i] = temp[0];
+					counter = temp[1] + 1;
+				}
+
+				
 			}
 
 		}	
@@ -541,7 +626,7 @@
 		*/
 		
 		//document.write("In Message:", message)
-		log = document.querySelector('#pac_position').value;
+		//log = document.querySelector('#pac_position').value;
 		//console.log(message)
 		//console.log(message[0])
 		//console.log(message[1])
@@ -558,16 +643,17 @@
 		
 
 		//Add to Logs
-		if (log != " ") {
+		/**if (log != " ") {
 			document.querySelector('#pac_position').value = message + "\n" + log;
 		}
 		else {
 			document.querySelector('#pac_position').value = message;
 		}
+		*/
 	};	
 
     	//Sends data
-    	document.querySelector('#pac_position_submit').onclick = function(e) {
+    	/*document.querySelector('#pac_position_submit').onclick = function(e) {
     	    var messageInputDom = document.querySelector('#pac_position_input');
     	    var message = messageInputDom.value;
     	    //document.write("Out Message:", message)
@@ -578,7 +664,7 @@
         	}));
 
         	messageInputDom.value = '';
-    	};	
+    	};*/
 
     	//Send Data by Variable
     	function sendData(e, message) {
@@ -587,11 +673,35 @@
     	        message2 = role + message;
 				if(isPac){
 					pacSocket.send(JSON.stringify({
-						'pac_message': message2+'~'+pacman.x+'~'+pacman.y+'~'+pacman.dir
-						+'~'+ghost1.x+'~'+ghost1.y+'~'+ghost1.dir
-						+'~'+ghost2.x+'~'+ghost2.y+'~'+ghost2.dir
-						+'~'+ghost3.x+'~'+ghost3.y+'~'+ghost3.dir
-						+'~'+ghost4.x+'~'+ghost4.y+'~'+ghost4.dir
+						'pac_message': message2
+						+'~'+powerup+'~'+pptimer
+						+'~'+pacman.x+'~'+pacman.y+'~'+pacman.dir+'~'+pacman.ofx+'~'+pacman.ofy
+						+'~'+ghost1.x+'~'+ghost1.y+'~'+ghost1.dir+'~'+ghost1.ofx+'~'+ghost1.ofy
+						+'~'+ghost2.x+'~'+ghost2.y+'~'+ghost2.dir+'~'+ghost2.ofx+'~'+ghost2.ofy
+						+'~'+ghost3.x+'~'+ghost3.y+'~'+ghost3.dir+'~'+ghost3.ofx+'~'+ghost3.ofy
+						+'~'+ghost4.x+'~'+ghost4.y+'~'+ghost4.dir+'~'+ghost4.ofx+'~'+ghost4.ofy
+						+'~'+pelletMazeGrid[0]
+						+'~'+pelletMazeGrid[1]
+						+'~'+pelletMazeGrid[2]
+						+'~'+pelletMazeGrid[3]
+						+'~'+pelletMazeGrid[4]
+						+'~'+pelletMazeGrid[5]
+						+'~'+pelletMazeGrid[6]
+						+'~'+pelletMazeGrid[7]
+						+'~'+pelletMazeGrid[8]
+						+'~'+pelletMazeGrid[9]
+						+'~'+pelletMazeGrid[10]
+						+'~'+pelletMazeGrid[11]
+						+'~'+pelletMazeGrid[12]
+						+'~'+pelletMazeGrid[13]
+						+'~'+pelletMazeGrid[14]
+						+'~'+pelletMazeGrid[15]
+						+'~'+pelletMazeGrid[16]
+						+'~'+pelletMazeGrid[17]
+						+'~'+pelletMazeGrid[18]
+						+'~'+pelletMazeGrid[19]
+						+'~'+pelletMazeGrid[20]
+
         	}));
 				}
 				else{
@@ -695,7 +805,7 @@
 			"0000000000000000000",
 		];
 	
-	
+	var isInWin = false;
 	
 
 	
@@ -711,7 +821,6 @@
 		var g4x;
 		var g4y;
 	
-		
 		with(pacman){
 		pacx=x;
 		pacy=y;
@@ -732,6 +841,7 @@
 		g4x=x;
 		g4y=y;
 		}
+		var win = false;
 		if((pacx == g1x) && (pacy == g1y)){
 			if(powerup){
 				with(ghost1){
@@ -741,8 +851,12 @@
 				}
 			}else{
 			console.log("loss yea");
-			alert("Ghosts win!");
+
+			//alert("Ghosts win!");
+			win = true;
+			
 			}
+			
 		}
 		if((pacx == g2x) && (pacy == g2y)){
 			if(powerup){
@@ -753,7 +867,8 @@
 				}
 			}else{
 			console.log("loss yea");
-			alert("Ghosts win!");
+			//alert("Ghosts win!");
+			win = true;
 			}
 		}
 		if((pacx == g3x) && (pacy == g3y)){
@@ -765,7 +880,8 @@
 				}
 			}else{
 			console.log("loss yea");
-			alert("Ghosts win!");
+			//alert("Ghosts win!");
+			win = true;
 			}
 		}
 		if((pacx == g4x) && (pacy == g4y)){
@@ -777,13 +893,22 @@
 				}
 			}else{
 			console.log("loss yea");
-			alert("Ghosts win!");
+			//alert("Ghosts win!");
+			win = true;
+			
 			}
 		}
+		if (win && !isInWin) {
+			isInWin = true;
+			if (isPac) {
+				window.location.replace("/lose");
+			}
+			else {
+				window.location.replace("/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts");
+			}			
+		}
 	}
-	
 
-	
 	function moveChar(nm, nmchar){
 
 	if(isPac){
@@ -952,9 +1077,11 @@
 			}
 			
 			drawMap();
+
+			var frames = 26; 
 			
 			if(moving){
-				if(offsetConv > 26){
+				if(offsetConv > frames){
 					oldofx = ofx;
 					oldofy = ofy;
 				}
@@ -970,7 +1097,7 @@
 					else{
 						//console.log(mazeI);
 						ofx++;
-						if (offsetConv > 26){	
+						if (offsetConv > frames){	
 							x++;
 						}
 					}
@@ -984,7 +1111,7 @@
 					}
 					else{
 						ofx--;
-						if (offsetConv > 26){
+						if (offsetConv > frames){
 							x--;
 						}
 						break;
@@ -1002,7 +1129,7 @@
 							dy = 0;
 						}
 						else{
-							if (offsetConv > 26){
+							if (offsetConv > frames){
 								y++;
 							}
 							ofy++;
@@ -1017,7 +1144,7 @@
 							dy = 0;
 						}
 						else{
-							if (offsetConv > 26){
+							if (offsetConv > frames){
 								y--;
 							}
 							ofy--;
@@ -1027,7 +1154,7 @@
 						// not supposed to happen
 				}
 				
-				if(offsetConv > 26){
+				if(offsetConv > frames){
 				telePac(x, y, nm);
 				}
 					
@@ -1719,7 +1846,17 @@
 			
 			if(pelletsEaten == 151){	//Victory condition
 				console.log("victory!");
-				alert("Pacman Wins!");
+				//alert("Pacman Wins!");
+				if (!isInWin) {
+					isInWin = true;
+					if (!isPac) {
+						window.location.href = "/lose";
+					}
+					else {
+						window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/pacman";
+					}
+				}
+				return;
 			}
 			//drawChar(x, y, nmchar);
 			
@@ -1797,16 +1934,19 @@
 			//console.log(pacsync);
 			//console.log(ghostsync);
 			
-		//if (gameOn) {
 <<<<<<< HEAD
-			//pacTimer= setTimeout("main()", 7);
-=======
+
 			pacTimer= setTimeout("main()", 34);
->>>>>>> d8987c5eae53e5db50a0a8db2e763aae2bf8b500
+=======
+		//if (gameOn) {
+			pacTimer= setTimeout("main()", 17);
 		//}
+>>>>>>> 8ac0650cc408c3757f7ae6bb642524f1b60217de
 			if(isPac){
-				//if(updatetimer > 10){
-				//}
+				if(updatetimer > 40){
+					sendData(e,'$');
+					updatetimer = 0;
+				}
 			}
 			updatetimer++;
 		
