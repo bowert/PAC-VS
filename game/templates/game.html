@@ -104,34 +104,33 @@
 			<br>
 		
 			<div class="row" style="padding-left:2%;">
-				<div class="col-sm-2">
-					<input id="setPac" type="button" value="Select Pacman" style="width:100%">
+				<div class="col-sm-2" style="padding-top: 1%">
+					<input id="setPac" type="button" value="Select Pacman" style="width:50%">
 				</div>
 				<div class="col-sm-2">
-						<input id="setGhost" type="button" value="Select Ghosts" style="width:100%">
+						<input id="setGhost" type="button" value="Select Ghosts" style="width:50%">
 				</div>
-				<div class="col-sm-1">
+				<div class="col-sm-1" style="display:none;">
 						<p>Role: </p>
 				</div>
-				<div class="col-sm-1">
+				<div class="col-sm-1" style="display:none;">
 						<p id="pac_role">No Role</p>
 				</div>
 			</div>
 		
 			<br>
 		
+			
 			<div class="row" style="padding-left: 5%;">
 				<input id="startGame" type="button" value="Start Game" style="width: 20%">
+				<!---
 				<div style="padding-left: 2%;">
 					<input id="pac_position_input" type="text">
 					<input id="pac_position_submit" type="button" value="Send"/>
 				</div>
+				-->
 			</div>
-		
-			<br>
-		
-			<p>Logs:</p>
-			<textarea readonly id="pac_position" cols="20" rows="14"> </textarea>
+			
 	<!--<script type="text/javascript" src="{% static 'js/game.js' %}"></script>-->
 	<script>
 
@@ -265,7 +264,7 @@
         	} 
         	else if (e.keyCode == '13') {
         	    // Enter
-        	    document.querySelector('#pac_position_submit').click();
+        	    //document.querySelector('#pac_position_submit').click();
         	}
     	}	
 
@@ -541,7 +540,7 @@
 		*/
 		
 		//document.write("In Message:", message)
-		log = document.querySelector('#pac_position').value;
+		//log = document.querySelector('#pac_position').value;
 		//console.log(message)
 		//console.log(message[0])
 		//console.log(message[1])
@@ -558,16 +557,17 @@
 		
 
 		//Add to Logs
-		if (log != " ") {
+		/**if (log != " ") {
 			document.querySelector('#pac_position').value = message + "\n" + log;
 		}
 		else {
 			document.querySelector('#pac_position').value = message;
 		}
+		*/
 	};	
 
     	//Sends data
-    	document.querySelector('#pac_position_submit').onclick = function(e) {
+    	/*document.querySelector('#pac_position_submit').onclick = function(e) {
     	    var messageInputDom = document.querySelector('#pac_position_input');
     	    var message = messageInputDom.value;
     	    //document.write("Out Message:", message)
@@ -578,7 +578,7 @@
         	}));
 
         	messageInputDom.value = '';
-    	};	
+    	};*/
 
     	//Send Data by Variable
     	function sendData(e, message) {
@@ -741,7 +741,15 @@
 				}
 			}else{
 			console.log("loss yea");
+
 			alert("Ghosts win!");
+			if (isPac) {
+				window.location.href = "/home";
+			}
+			else {
+				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
+			}
+			return;
 			}
 		}
 		if((pacx == g2x) && (pacy == g2y)){
@@ -754,6 +762,13 @@
 			}else{
 			console.log("loss yea");
 			alert("Ghosts win!");
+			if (isPac) {
+				window.location.href = "/home";
+			}
+			else {
+				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
+			}
+			return;
 			}
 		}
 		if((pacx == g3x) && (pacy == g3y)){
@@ -766,6 +781,13 @@
 			}else{
 			console.log("loss yea");
 			alert("Ghosts win!");
+			if (isPac) {
+				window.location.href = "/home";
+			}
+			else {
+				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
+			}
+			return;
 			}
 		}
 		if((pacx == g4x) && (pacy == g4y)){
@@ -778,6 +800,13 @@
 			}else{
 			console.log("loss yea");
 			alert("Ghosts win!");
+			if (isPac) {
+				window.location.href = "/home";
+			}
+			else {
+				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
+			}
+			return;
 			}
 		}
 	}
@@ -1722,6 +1751,13 @@
 			if(pelletsEaten == 151){	//Victory condition
 				console.log("victory!");
 				alert("Pacman Wins!");
+				if (!isPac) {
+					window.location.href = "/home";
+				}
+				else {
+					window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/pacman";
+				}
+				return;
 			}
 			//drawChar(x, y, nmchar);
 			
