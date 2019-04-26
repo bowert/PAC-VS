@@ -32,4 +32,5 @@ urlpatterns = [
 	path('game/<room_name>', views.game, name='game'),
     path('test/<room_name>', views.test, name='test'),
     path('pac_test/<room_name>', views.pac_test, name='pac_test'),
+    path('win/<pellets>/<power>/<win>', views.win, name='win'),
 ]
