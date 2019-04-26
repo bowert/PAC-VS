@@ -53,6 +53,11 @@ def disconnected(request):
     return render(request, 'disconnected.html')
 
 def stats(request):
+
+    print(request.GET.get('break'))
+    if (request.GET.get('break')):
+            return redirect('/home')
+
     stat = Stats.objects.filter(id=1).first()
     if(stat == None):
         stat = Stats.objects.create()
