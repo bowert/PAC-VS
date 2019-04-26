@@ -1848,6 +1848,9 @@
 			var d = new Date();
 			var speed = 100/1000;
 			time = d.getMilliseconds();
+			if(time < lastTime){
+				time += 1000;
+			}
 
 			if(lastTime === 0){
 				lastTime = time;
@@ -1855,6 +1858,7 @@
 			else{
 				//telePac(x, y, nm);
 				//offsetConv++;
+				
 				offsetConv += speed * (time-lastTime);
 				console.log("time");
 				console.log(time);
@@ -1862,6 +1866,7 @@
 				console.log(lastTime);
 				console.log("off");
 				console.log(offsetConv);
+				lastTime = time;
 			}
 		}
 			
