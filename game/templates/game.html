@@ -260,11 +260,13 @@
     	}	
 
 		pacSocket.onmessage = function(e) {
+		
 		var data = JSON.parse(e.data);
 		var message = data.pac_message;
 		//var pacx
 		var nupacx = "";
 		var xnupacx;
+
 		var nupacy = "";
 		var xnupacy;
 		var nupacdir = "";
@@ -297,6 +299,12 @@
 		var xnug4y;
 		var nug4dir = "";
 		var xnug4dir;
+		
+		if(message[0] != '$'){
+			sendData(e, "$");
+			//return;
+		}
+		
 		
 		//console.log(newgs.tpac);
 		
@@ -1671,7 +1679,6 @@
 		//}
 			if(isPac){
 				//if(updatetimer > 10){
-					sendData(e, "$");
 				//}
 			}
 			updatetimer++;
