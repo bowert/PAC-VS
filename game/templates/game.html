@@ -1866,7 +1866,12 @@
 				console.log(lastTime);
 				console.log("off");
 				console.log(offsetConv);
-				lastTime = time;
+				if(time >= 1000){
+					lastTime = time - 1000;
+				}
+				else{
+					lastTime = time;
+				}
 			}
 		}
 			
