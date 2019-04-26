@@ -1670,8 +1670,11 @@
 			pacTimer= setTimeout("main()", 7);
 		//}
 			if(isPac){
-				sendData(e, "$");
+				if(updatetimer > 10){
+					sendData(e, "$");
+				}
 			}
+			updatetimer++;
 		
 	if(isPac){
 		//updategs(pacgs);
