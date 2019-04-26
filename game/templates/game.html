@@ -353,41 +353,47 @@
 			}
 			counter++;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug2x = temp[0];
 			counter = temp[1] + 1; 
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug2y = temp[0];
 			counter = temp[1] + 1;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug2dir = temp[0];
 			counter = temp[1] + 1;			
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug3x = temp[0];
 			counter = temp[1] + 1; 
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug3y = temp[0];
 			counter = temp[1] + 1;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug3dir = temp[0];
 			counter = temp[1] + 1;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug4x = temp[0];
 			counter = temp[1] + 1; 
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug4y = temp[0];
 			counter = temp[1] + 1;
 
-			temp = getNext(message, counter)
+			temp = getNext(message, counter);
 			nug4dir = temp[0];
 			counter = temp[1] + 1;
+
+			for(var i=0; i<pelletMazeGrid.length; i++){
+				temp = getNext(message, counter);
+				pelletMazeGrid[i] = temp[0];
+				counter = temp[1] + 1;
+			}
 
 			if(!isPac){
 				xnupacx = parseInt(nupacx, 10);
@@ -506,6 +512,8 @@
 					ghost4.dx = 0;
 					ghost4.dy = 0;
 				}
+
+				
 			}
 
 		}	
@@ -592,6 +600,28 @@
 						+'~'+ghost2.x+'~'+ghost2.y+'~'+ghost2.dir
 						+'~'+ghost3.x+'~'+ghost3.y+'~'+ghost3.dir
 						+'~'+ghost4.x+'~'+ghost4.y+'~'+ghost4.dir
+						+'~'+pelletMazeGrid[0]
+						+'~'+pelletMazeGrid[1]
+						+'~'+pelletMazeGrid[2]
+						+'~'+pelletMazeGrid[3]
+						+'~'+pelletMazeGrid[4]
+						+'~'+pelletMazeGrid[5]
+						+'~'+pelletMazeGrid[6]
+						+'~'+pelletMazeGrid[7]
+						+'~'+pelletMazeGrid[8]
+						+'~'+pelletMazeGrid[9]
+						+'~'+pelletMazeGrid[10]
+						+'~'+pelletMazeGrid[11]
+						+'~'+pelletMazeGrid[12]
+						+'~'+pelletMazeGrid[13]
+						+'~'+pelletMazeGrid[14]
+						+'~'+pelletMazeGrid[15]
+						+'~'+pelletMazeGrid[16]
+						+'~'+pelletMazeGrid[17]
+						+'~'+pelletMazeGrid[18]
+						+'~'+pelletMazeGrid[19]
+						+'~'+pelletMazeGrid[20]
+
         	}));
 				}
 				else{
