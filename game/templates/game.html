@@ -1968,10 +1968,12 @@
 			var endTime = new Date();
 			endTime -= startTime;
 			console.log(endTime)
-			//if(endTime < 30){
-			//	pacTimer= setTimeout("main()", (30-endTime));
-			//}
-			pacTimer= setTimeout("main()", 17);
+			if(endTime < 30){
+				pacTimer= setTimeout("main()", (30-endTime));
+			}
+			else{
+				pacTimer= setTimeout("main()", 17);
+			}
 		//}
 
 			if(isPac){
