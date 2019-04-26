@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<canvas id="map" width="1300" height="600" style="border:1px solid #c3c3c3;">
+	<canvas id="map" width="900" height="550" style="border:1px solid #c3c3c3;">
 	</canvas>
 	
 	<div style="display:none;">
@@ -104,12 +104,9 @@
 			<br>
 		
 			<div class="row" style="padding-left:2%;">
-				<div class="col-sm-2" style="padding-top: 1%">
-					<input id="setPac" type="button" value="Select Pacman" style="width:50%">
-				</div>
-				<div class="col-sm-2">
-						<input id="setGhost" type="button" value="Select Ghosts" style="width:50%">
-				</div>
+					<input id="setPac" type="button" value="Select Pacman" style="width:20%">
+				
+						<input id="setGhost" type="button" value="Select Ghosts" style="width:20%">
 				<div class="col-sm-1" style="display:none;">
 						<p>Role: </p>
 				</div>
@@ -1933,15 +1930,11 @@
 			
 			//console.log(pacsync);
 			//console.log(ghostsync);
-			
-<<<<<<< HEAD
 
-			pacTimer= setTimeout("main()", 34);
-=======
 		//if (gameOn) {
 			pacTimer= setTimeout("main()", 17);
 		//}
->>>>>>> 8ac0650cc408c3757f7ae6bb642524f1b60217de
+
 			if(isPac){
 				if(updatetimer > 40){
 					sendData(e,'$');
