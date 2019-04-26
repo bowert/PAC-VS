@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+	<canvas id="map" width="1300" height="600" style="border:1px solid #c3c3c3;">
+	</canvas>
 	
 	<div style="display:none;">
 	<img id="pacman" src="{% static 'images/pacman.png' %}" width="300" height="227">
@@ -98,42 +100,36 @@
 
     </head>
     <body>
-			<div class="row">
-				<div  style="float:left">
-					<canvas id="map" width="900" height="550" style="border:1px solid #c3c3c3;">
-					</canvas>
+			<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" />
+			<br>
+		
+			<div class="row" style="padding-left:2%;">
+				<div class="col-sm-2" style="padding-top: 1%">
+					<input id="setPac" type="button" value="Select Pacman" style="width:50%">
 				</div>
-				<div style="float: left">
-					<div class="row" style="padding-left: 1%;">
-						<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" style="width: 320px"/>
-						<br>
-					</div>
-					<div class="row" style="padding-left:2%; width:320px;">
-							<div id="setPacBool" class="col-sm-2" style="padding-top: 5%">
-								<input id="setPac" type="button" value="Select Pacman" style="width:100%">
-							</div>
-							<div id="setGhostBool" class="col-sm-2" style="padding-top: 2%">
-									<input id="setGhost" type="button" value="Select Ghosts" style="width:100%">
-							</div>
-							<div class="col-sm-1" style="display:none;">
-									<p>Role: </p>
-							</div>
-							<div class="col-sm-1" style="display:none;">
-									<p id="pac_role">No Role</p>
-							</div>
-						</div>
-					<div class="row" style="padding-left: 3%; padding-top: 10%">
-							<input id="startGame" type="button" value="Start Game" style="width: 100%">
-					</div>
+				<div class="col-sm-2">
+						<input id="setGhost" type="button" value="Select Ghosts" style="width:50%">
+				</div>
+				<div class="col-sm-1" style="display:none;">
+						<p>Role: </p>
+				</div>
+				<div class="col-sm-1" style="display:none;">
+						<p id="pac_role">No Role</p>
 				</div>
 			</div>
-		
-			
 		
 			<br>
 		
 			
-
+			<div class="row" style="padding-left: 5%;">
+				<input id="startGame" type="button" value="Start Game" style="width: 20%">
+				<!---
+				<div style="padding-left: 2%;">
+					<input id="pac_position_input" type="text">
+					<input id="pac_position_submit" type="button" value="Send"/>
+				</div>
+				-->
+			</div>
 			
 	<!--<script type="text/javascript" src="{% static 'js/game.js' %}"></script>-->
 	<script>
@@ -194,21 +190,13 @@
     	document.querySelector('#setPac').onclick = function(e) {
     	    role = "p";
 			isPac = true;
-    	    //document.querySelector('#pac_role').innerHTML = role;
-			var setPac = document.getElementById("setPacBool");
-			setPac.style.display = "none";
-			var setGhost = document.getElementById('setGhostBool');
-			setGhost.style.display = "none";
+    	    document.querySelector('#pac_role').innerHTML = role;
     	}
 
     	document.querySelector('#setGhost').onclick = function() {
-    		role = "g";
-			isPac = false;
-    		//document.querySelector('#pac_role').innerHTML = role;
-			var setPac = document.getElementById("setPacBool");
-			setPac.style.display = "none";
-			var setGhost = document.getElementById('setGhostBool');
-			setGhost.style.display = "none";
+    	role = "g";
+		isPac = false;
+    	document.querySelector('#pac_role').innerHTML = role;
     	}
 		
 
@@ -487,7 +475,7 @@
 					powerup = false;
 				}
 				pptimer = parseInt(lpptimer, 10);
-				pelletsEaten = parseInt(lpelletsEaten, 10);
+				pelletsEaten = parseInt(lpelletsEaten, 10) + 1;
 
 				pacman.x = xnupacx;
 				pacman.y = xnupacy;
@@ -770,7 +758,8 @@
 	var pacgs = new gamestate();
 	
 	var updatetimer = 0;
-	
+	var lastTime = 0;
+	var timeRunning;
 	//newgame();
 	//main();
 
@@ -1097,7 +1086,18 @@
 			drawMap();
 
 			var frames = 26; 
-			
+			var d = new Date();
+			var speed = 100/1000;
+			time = d.getMilliseconds();
+			if(time < lastTime){
+				time += 1000;
+			}
+			if(lastTime === 0){
+				lastTime = time;
+				return;
+			}
+			var dt = time - lastTime;
+
 			if(moving){
 				if(offsetConv > frames){
 					oldofx = ofx;
@@ -1112,13 +1112,6 @@
 						dx = 0;
 						dy = 0;
 					}
-					else{
-						//console.log(mazeI);
-						ofx++;
-						if (offsetConv > frames){	
-							x++;
-						}
-					}
 					break;
 				case -1:
 					var mazeI = mazeGrid[y].charAt(x-2);
@@ -1127,16 +1120,7 @@
 						dx = 0;
 						dy = 0;
 					}
-					else{
-						ofx--;
-						if (offsetConv > frames){
-							x--;
-						}
-						break;
-					}
-						default:
-						// not supposed to happen
-						
+					break;
 				}
 				switch(dy) {
 					case 1:
@@ -1146,13 +1130,6 @@
 							dx = 0;
 							dy = 0;
 						}
-						else{
-							if (offsetConv > frames){
-								y++;
-							}
-							ofy++;
-
-						}
 						break;
 					case -1:
 						var mazeY = mazeGrid[y-1].charAt(x-1);
@@ -1161,19 +1138,41 @@
 							dx = 0;
 							dy = 0;
 						}
-						else{
-							if (offsetConv > frames){
-								y--;
-							}
-							ofy--;
-						}
 						break;
-					default:
 						// not supposed to happen
 				}
+
+				dd = speed*dt;
+				ofx += dx*dd;
+				ofy += dy*dd;
 				
+				console.log('x');
+				console.log(ofx);
+				console.log('y');
+				console.log(ofy);
+
+				if(dx == 1){
+					x = Math.floor(dx/26);
+				}
+				else {
+					x = Math.ceil(dx/26); 
+				}
+				if(dy == 1){
+					y = Math.floor(dy/26);
+				}
+				else {
+					y = Math.ceil(dy/26);
+				}
+
 				if(offsetConv > frames){
-				telePac(x, y, nm);
+					telePac(x, y, nm);
+				}
+
+				if(time >= 1000){
+					lastTime = time - 1000;
+				}
+				else{
+					lastTime = time;
 				}
 					
 			}
@@ -1244,8 +1243,20 @@
 	function telePac (row, col, nm) {
 		with(nm){
 
-			ofx = 374+(26*x)+13;
-			ofy = (26*(y))+13;
+			if(dx == 1){
+					x = Math.floor(dx/26);
+			}
+			else {
+				x = Math.ceil(dx/26); 
+			}
+			if(dy == 1){
+				y = Math.floor(dy/26);
+			}
+			else {
+				y = Math.ceil(dy/26);
+			}	
+			//ofx = 374+(26*x)+13;
+			//ofy = (26*(y))+13;
 			/*
 			switch(dir) {
 				case 1:
@@ -1265,7 +1276,7 @@
 		
 		//drawCharSpec(ofx, ofy, nm);
 		//drawChar(x, y, nm);
-	}
+		}
 	}
 	
 	function drawChar (row, col, nm){
@@ -1612,8 +1623,12 @@
 		}		
 	}
 	
-	function main(e){
+	function sleep(ms){
+		return new Promise(resolve => setTimeout(resolve,ms));
+	}
 
+	function main(e){
+		timeRunning = new Date();
 		if(timer) clearTimeout(timer);
 		if(isPac){
 			//updategs(pacgs);
@@ -1860,6 +1875,7 @@
 			//telePac(x, y, nm);
 			offsetConv++;
 		}
+		}
 			
 			
 			if(pelletsEaten == 151){	//Victory condition
@@ -1953,7 +1969,12 @@
 			//console.log(ghostsync);
 
 		//if (gameOn) {
-			pacTimer= setTimeout("main()", 17);
+			var endTime = new Date();
+			endTime -= startTime;
+			if(endTime < 30){
+				sleep(30 - endtime);
+			}
+			pacTimer= setTimeout("main()", 0);
 		//}
 
 			if(isPac){
