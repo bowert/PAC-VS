@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.utils.safestring import mark_safe
 from . forms import CreateRoomForm
-from . models import Server
+from . models import Server, Stats
 import json
 
 
@@ -83,3 +83,20 @@ def pac_test(request, room_name):
         return render(request, 'pac_test.html', {
             'room_name_json': mark_safe(json.dumps(room_name))
         })
+
+def win(request, pellets, power, win):
+
+    stats = Stats.objects.filter(id=1).first()
+
+    print("pellets", pellets)
+    stats.pellets += int(pellets)
+    print("power", power)
+    stats.PP ++ int(power)
+    print("win", win)
+    if (win == 'pacman'):
+        stats.pacVictories += 1
+    else:
+        stats.ghostVictories += 1
+    stats.save()
+
+    return redirect('/home')

@@ -619,7 +619,15 @@
 				}
 			}else{
 			console.log("loss yea");
+
 			alert("Ghosts win!");
+			if (isPac) {
+				window.location.href = "/home";
+			}
+			else {
+				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
+			}
+			return;
 			}
 		}
 		if((pacx == g2x) && (pacy == g2y)){
@@ -632,6 +640,13 @@
 			}else{
 			console.log("loss yea");
 			alert("Ghosts win!");
+			if (isPac) {
+				window.location.href = "/home";
+			}
+			else {
+				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
+			}
+			return;
 			}
 		}
 		if((pacx == g3x) && (pacy == g3y)){
@@ -644,6 +659,13 @@
 			}else{
 			console.log("loss yea");
 			alert("Ghosts win!");
+			if (isPac) {
+				window.location.href = "/home";
+			}
+			else {
+				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
+			}
+			return;
 			}
 		}
 		if((pacx == g4x) && (pacy == g4y)){
@@ -656,6 +678,13 @@
 			}else{
 			console.log("loss yea");
 			alert("Ghosts win!");
+			if (isPac) {
+				window.location.href = "/home";
+			}
+			else {
+				window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/ghosts";
+			}
+			return;
 			}
 		}
 	}
@@ -1598,6 +1627,13 @@
 			if(pelletsEaten == 151){	//Victory condition
 				console.log("victory!");
 				alert("Pacman Wins!");
+				if (!isPac) {
+					window.location.href = "/home";
+				}
+				else {
+					window.location.href = "/win/" + pelletsEaten + "/" + powerpelletsEaten + "/pacman";
+				}
+				return;
 			}
 			//drawChar(x, y, nmchar);
 			
