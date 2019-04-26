@@ -104,10 +104,10 @@
 			<br>
 		
 			<div class="row" style="padding-left:2%;">
-				<div class="col-sm-2" style="padding-top: 1%">
+				<div id="setPacBool" class="col-sm-2" style="padding-top: 1%">
 					<input id="setPac" type="button" value="Select Pacman" style="width:50%">
 				</div>
-				<div class="col-sm-2">
+				<div id="setGhostBool" class="col-sm-2">
 						<input id="setGhost" type="button" value="Select Ghosts" style="width:50%">
 				</div>
 				<div class="col-sm-1" style="display:none;">
@@ -190,13 +190,21 @@
     	document.querySelector('#setPac').onclick = function(e) {
     	    role = "p";
 			isPac = true;
-    	    document.querySelector('#pac_role').innerHTML = role;
+    	    //document.querySelector('#pac_role').innerHTML = role;
+			var setPac = document.getElementById("setPacBool");
+			setPac.style.display = "none";
+			var setGhost = document.getElementById('setGhostBool');
+			setGhost.style.display = "none";
     	}
 
     	document.querySelector('#setGhost').onclick = function() {
-    	role = "g";
-		isPac = false;
-    	document.querySelector('#pac_role').innerHTML = role;
+    		role = "g";
+			isPac = false;
+    		//document.querySelector('#pac_role').innerHTML = role;
+			var setPac = document.getElementById("setPacBool");
+			setPac.style.display = "none";
+			var setGhost = document.getElementById('setGhostBool');
+			setGhost.style.display = "none";
     	}
 		
 
