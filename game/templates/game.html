@@ -1085,7 +1085,18 @@
 			drawMap();
 
 			var frames = 26; 
-			//MARKED
+			var d = new Date();
+			var speed = 100/1000;
+			time = d.getMilliseconds();
+			if(time < lastTime){
+				time += 1000;
+			}
+			if(lastTime === 0){
+				lastTime = time;
+				return;
+			}
+			var dt = time - lastTime;
+
 			if(moving){
 				if(offsetConv > frames){
 					oldofx = ofx;
@@ -1100,13 +1111,6 @@
 						dx = 0;
 						dy = 0;
 					}
-					else{
-						//console.log(mazeI);
-						ofx++;
-						if (offsetConv > frames){	
-							x++;
-						}
-					}
 					break;
 				case -1:
 					var mazeI = mazeGrid[y].charAt(x-2);
@@ -1115,16 +1119,7 @@
 						dx = 0;
 						dy = 0;
 					}
-					else{
-						ofx--;
-						if (offsetConv > frames){
-							x--;
-						}
-						break;
-					}
-						default:
-						// not supposed to happen
-						
+					break;
 				}
 				switch(dy) {
 					case 1:
@@ -1134,13 +1129,6 @@
 							dx = 0;
 							dy = 0;
 						}
-						else{
-							if (offsetConv > frames){
-								y++;
-							}
-							ofy++;
-
-						}
 						break;
 					case -1:
 						var mazeY = mazeGrid[y-1].charAt(x-1);
@@ -1149,19 +1137,36 @@
 							dx = 0;
 							dy = 0;
 						}
-						else{
-							if (offsetConv > frames){
-								y--;
-							}
-							ofy--;
-						}
 						break;
-					default:
 						// not supposed to happen
 				}
+
+				dd = speed*dt;
+				ofx += dx*dd;
+				ofy += dy*dd;
 				
+				if(dx == 1){
+					x = Math.floor(dx/26);
+				}
+				else {
+					x = Math.ceil(dx/26); 
+				}
+				if(dy == 1){
+					y = Math.floor(dy/26);
+				}
+				else {
+					y = Math.ceil(dy/26);
+				}
+
 				if(offsetConv > frames){
-				telePac(x, y, nm);
+					telePac(x, y, nm);
+				}
+
+				if(time >= 1000){
+					lastTime = time - 1000;
+				}
+				else{
+					lastTime = time;
 				}
 					
 			}
@@ -1253,7 +1258,7 @@
 		
 		//drawCharSpec(ofx, ofy, nm);
 		//drawChar(x, y, nm);
-	}
+		}
 	}
 	
 	function drawChar (row, col, nm){
@@ -1845,6 +1850,7 @@
 				//}
 				
 			}
+			/*
 			var d = new Date();
 			var speed = 100/1000;
 			time = d.getMilliseconds();
@@ -1855,10 +1861,11 @@
 			if(lastTime === 0){
 				lastTime = time;
 			}
+			*/
 			else{
 				//telePac(x, y, nm);
-				//offsetConv++;
-				
+				offsetConv++;
+				/*
 				offsetConv += speed * (time-lastTime);
 				console.log("time");
 				console.log(time);
@@ -1872,6 +1879,7 @@
 				else{
 					lastTime = time;
 				}
+				*/
 			}
 		}
 			
