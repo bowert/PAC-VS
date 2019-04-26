@@ -1242,8 +1242,20 @@
 	function telePac (row, col, nm) {
 		with(nm){
 
-			ofx = 374+(26*x)+13;
-			ofy = (26*(y))+13;
+			if(dx == 1){
+					x = Math.floor(dx/26);
+			}
+			else {
+				x = Math.ceil(dx/26); 
+			}
+			if(dy == 1){
+				y = Math.floor(dy/26);
+			}
+			else {
+				y = Math.ceil(dy/26);
+			}	
+			//ofx = 374+(26*x)+13;
+			//ofy = (26*(y))+13;
 			/*
 			switch(dir) {
 				case 1:
