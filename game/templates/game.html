@@ -389,12 +389,7 @@
 			nug4dir = temp[0];
 			counter = temp[1] + 1;
 
-			for(var i=0; i<pelletMazeGrid.length; i++){
-				temp = getNext(message, counter);
-				pelletMazeGrid[i] = temp[0];
-				counter = temp[1] + 1;
-			}
-
+			
 			if(!isPac){
 				xnupacx = parseInt(nupacx, 10);
 				xnupacy = parseInt(nupacy, 10);
@@ -511,6 +506,12 @@
 				}else if(ghost4.dir == 0){
 					ghost4.dx = 0;
 					ghost4.dy = 0;
+				}
+
+				for(var i=0; i<pelletMazeGrid.length; i++){
+					temp = getNext(message, counter);
+					pelletMazeGrid[i] = temp[0];
+					counter = temp[1] + 1;
 				}
 
 				
