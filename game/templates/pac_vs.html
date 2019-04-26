@@ -9,7 +9,7 @@
 	<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" />
     <body>
         <p style="color:white;">Welcome to PAC-VS! The worlds premiere online Pac-Man VS experience.</p>
-		<p style="color:white;">To play, click on the button below to create a lobby.</p>
+		<p style="color:white;padding-bottom:1%;">To play, enter a lobby name and click Create Lobby or join an existing lobby with Join Lobby.</p>
         
         <form name="createLobby" id="inputs" method="GET">
             <div style="display: none">
@@ -35,6 +35,11 @@
                 </div>
                 <div class="col-sm-2">
                     <button class="form-control" name="joinLobby" id="joinLobby" type="submit" value="joinLobby">Join Lobby</button>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 3%">
+                <div class="col-sm-3">
+                        <button style="width: 100%;" class="form-control" name="pacstats" id="pacstats" type="submit" value="pacstats">View Global Pac-Stats</button>
                 </div>
             </div>
         </form>

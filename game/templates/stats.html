@@ -4,14 +4,32 @@
     <head>
 	<body style="background-color:black;">
         <title>Pac Stats</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     </head>
 	<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" />
     <body>
-		<h1 style="color:white;">GLOBAL PAC-STATS</h1>
-		<p style="color:white;">PAC-MAN Winrate: {{ pacWinRate }}</p>
-		<p style="color:white;">Ghost Winrate: {{ ghostWinRate }}</p>
-        <p style="color:white;">Pellets Eaten: {{ stats.pellets }}</p>
-		<p style="color:white;">Power Pellets Eaten: {{ stats.PP }}</p>
+        <h1 style="color:white;">GLOBAL PAC-STATS</h1>
+        
+        
+        <div class="row" style="padding-left:2%;padding-top:1%;">
+            <div clas="col-sm-2">
+                <p style="color:white;">PAC-MAN Winrate: {{ pacWinRate }}%</p>
+            </div>
+            <div class="col-sm-4">
+                <div class="progress" style="background-color:red;height:150%">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{ pacWinRate }}%;background-color:yellow">
+                          <span class="sr-only">70% Complete</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p style="color:white;">Ghost Winrate: {{ ghostWinRate }}%</p>
+            </div>
+        </div>
+
+        <p style="color:white;padding-top: 3%;padding-left:2%">Pellets Eaten: {{ stats.pellets }}</p>
+		<p style="color:white;padding-left:2%">Power Pellets Eaten: {{ stats.PP }}</p>
     </body>
 
 </html>

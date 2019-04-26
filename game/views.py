@@ -15,6 +15,9 @@ def home(request):
         #print("here")
         form = CreateRoomForm(request.GET)
 
+        if (request.GET.get('pacstats')):
+            return redirect('/stats')
+
         if form.is_valid():
             #print("here2")
             lobbyName = form.cleaned_data['lobbyName']
@@ -56,7 +59,10 @@ def stats(request):
         stat.save()
 
     pacWin = stat.pacVictories / (stat.ghostVictories + stat.pacVictories)
+    pacWin = int(pacWin * 100)
+
     ghostWin = stat.ghostVictories / (stat.pacVictories + stat.ghostVictories)
+    ghostWin = int(ghostWin * 100)
     return render(request, 'stats.html',{'stats': stat, 'pacWinRate': pacWin, 'ghostWinRate': ghostWin,})
 
 def game(request, room_name):
