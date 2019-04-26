@@ -65,8 +65,6 @@ def game(request, room_name):
     if (servers == None or servers.numOfPlayers >= 2):
         return redirect('/home')
     else:
-        servers.numOfPlayers += 1
-        servers.save()
         return render(request, 'game.html', {
             'room_name_json': mark_safe(json.dumps(room_name))
         })
