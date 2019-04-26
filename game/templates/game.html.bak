@@ -262,24 +262,132 @@
 		pacSocket.onmessage = function(e) {
 		var data = JSON.parse(e.data);
 		var message = data.pac_message;
-		var newgs = data.pac_megamessage;	
 		//var pacx
-		console.log(message);					
-		var text="";
+		var nupacx = "";
+		var xnupacx;
+		var nupacy = "";
+		var xnupacy;
+		var nupacdir = "";
+		var xnupacdir;
+		
+		var nug1x = "";
+		var xnug1x; 
+		var nug1y = "";
+		var xnug1y;
+		var nug1dir = "";
+		var xnug1dir;
+		
+		var nug2x = "";
+		var xnug2x;
+		var nug2y = "";
+		var xnug2y;
+		var nug2dir = "";
+		var xnug2dir;
+		
+		var nug3x = "";
+		var xnug3x;
+		var nug3y = "";
+		var xnug3y;
+		var nug3dir = "";
+		var xnug3dir;
+		
+		var nug4x = "";
+		var xnug4x;
+		var nug4y = "";
+		var xnug4y;
+		var nug4dir = "";
+		var xnug4dir;
+		
 		//console.log(newgs.tpac);
-		/*
-		if(message[2] == '~'){
+		
+		
+			if(message[2] == '~'){
 			//console.log(message.length);
-			for(var i = 3; i < message.length; i++){
-				text += message[i];
+			var counter = 3;
+			while((message[counter] != '~') && (counter < message.length)){
+				nupacx += message[counter];
+				counter++;
 				//console.log(message[i]);
 			}
+			counter++;
+			while((message[counter] != '~') && (counter < message.length)){
+				nupacy += message[counter];
+				counter++;
+			}
+			counter++;
+			while((message[counter] != '~') && (counter < message.length)){
+				nupacdir += message[counter];
+				counter++;
+			}
+			counter++;
+			while((message[counter] != '~') && (counter < message.length)){
+				nug1x += message[counter];
+				counter++;
+			}
+			counter++;
+			while((message[counter] != '~') && (counter < message.length)){
+				nug1y += message[counter];
+				counter++;
+			}
+			counter++;
+			while((message[counter] != '~') && (counter < message.length)){
+				nug1dir += message[counter];
+				counter++;
+			}
+			counter++;
+			
+			if(!isPac){
+			xnupacx = parseInt(nupacx, 10);
+			xnupacy = parseInt(nupacy, 10);
+			xnupacdir = parseInt(nupacdir, 10);
+			
+			pacman.x = xnupacx;
+			pacman.y = xnupacy;
+			pacman.dir = xnupacdir;
+			if(pacman.dir == 1){
+				pacman.dx = -1;
+				pacman.dy = 0;
+			}else if(pacman.dir == 2){
+				pacman.dx = 0;
+				pacman.dy = -1;
+			}else if(pacman.dir == 3){
+				pacman.dx = 1;
+				pacman.dy = 0;
+			}else if(pacman.dir == 4){
+				pacman.dx = 0;
+				pacman.dy = 1;
+			}
+			
+			xnug1x = parseInt(nug1x, 10);
+			xnug1y = parseInt(nug1y, 10);
+			xnug1dir = parseInt(nug1dir, 10);
+			console.log(xnug1x);
+			console.log(xnug1y);
+			ghost1.x = xnug1x;
+			ghost1.y = xnug1y;
+			ghost1.dir = xnug1dir;
+			if(ghost1.dir == 1){
+				ghost1.dx = -1;
+				ghost1.dy = 0;
+			}else if(ghost1.dir == 2){
+				ghost1.dx = 0;
+				ghost1.dy = -1;
+			}else if(ghost1.dir == 3){
+				ghost1.dx = 1;
+				ghost1.dy = 0;
+			}else if(ghost1.dir == 4){
+				ghost1.dx = 0;
+				ghost1.dy = 1;
+			}
+			}
+			
 		}
-		*/
+		
+		
 		
 		if(!isPac){
 			//Object.assign(text, gamestate);
-			pacgs = newgs;
+			//pacgs = newgs;
 			//console.log(text);
 		}
 		
@@ -349,21 +457,15 @@
     	    //document.write(message);
     	    if (role != "No Role") {
     	        message2 = role + message;
-				message3 = "fefefef"
 				if(isPac){
 					pacSocket.send(JSON.stringify({
-						'pac_megamessage': message3,
-						'pac_message': message2,
-						'pac_ispac': "t",
-						'pac_x': pacman.x,
-						'pac_y': pacman.y, 
+						'pac_message': message2+'~'+pacman.x+'~'+pacman.y+'~'+ghost1.x+'~'+ghost1.y
         	}));
 				}
 				else{
 					pacSocket.send(JSON.stringify({
-					'pac_message': message2,
-    	            'pac_ispac': "f",
-    	        }));
+					'pac_message': message2
+					}));
 				}
 				}
     	    }
@@ -404,6 +506,7 @@
 	var g3prev = "orange_down";
 	var g4prev = "pink_down";
 	
+	var lastrecivedkey = 0;
 	var pacgs = new gamestate();
 	
 	//newgame();
@@ -1197,15 +1300,19 @@
 		with(pname){
 			//console.log(key);
 			if (key == 'l') { //left
+				lastrecivedkey = '1';
 				ibuffer = 1;
 			}
 			else if (key == 'u') { //up
+				lastrecivedkey = 'u';
 				ibuffer = 2;
 			}
 			else if (key == 'r') { //right
+				lastrecivedkey = 'r';
 				ibuffer = 3;
 			}
 			else if (key == 'd') { //down
+				lastrecivedkey = 'd';
 				ibuffer = 4;
 			}
 			
@@ -1226,18 +1333,17 @@
 		}		
 	}
 	
-	function main(){
+	function main(e){
 
 		if(timer) clearTimeout(timer);
 		if(isPac){
-			updategs(pacgs);
+			//updategs(pacgs);
 		}
-
 		
 		colChk();
 		//console.log(ghost1.ibuffer);
 		
-		if(spawnTimer < 300){
+		if(spawnTimer < 300){	
 			ghost2.alive = false;
 		}
 		else if(spawnTimer == 301){
@@ -1446,7 +1552,6 @@
 				var mazeI = globalMazeGrid[y].charAt(x-1);
 				var pmazeI = pelletMazeGrid[y].charAt(x-1);
 					if (pmazeI == 'p'){
-
 						pelletsEaten++;
 						pelletMazeGrid[y] = pelletMazeGrid[y].substr(0, x-1) + 'x' + pelletMazeGrid[y].substr(x);
 					}
@@ -1560,12 +1665,15 @@
 		//if (gameOn) {
 			pacTimer= setTimeout("main()", 7);
 		//}
+			if(isPac){
+				//sendData(e, lastrecivedkey);
+			}
 		
 	if(isPac){
-		updategs(pacgs);
+		//updategs(pacgs);
 	}
 	else{
-		updaterealgs(pacgs);
+		//updaterealgs(pacgs);
 	}
 	}
 	/*
