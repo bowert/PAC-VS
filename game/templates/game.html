@@ -1966,11 +1966,15 @@
 
 		//if (gameOn) {
 			var endTime = new Date();
-			endTime -= startTime;
+			console.log(endTime);
+			console.log(timeRunning );
+			endTime -= timeRunning;
 			if(endTime < 17){
 				pacTimer= setTimeout("main()", (17-endTime));
 			}
-			pacTimer= setTimeout("main()", 1);
+			else{
+				pacTimer= setTimeout("main()", 0);
+			}
 		//}
 
 			if(isPac){
