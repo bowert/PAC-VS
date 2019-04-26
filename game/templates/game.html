@@ -511,6 +511,8 @@
 	var lastrecivedkey = 0;
 	var pacgs = new gamestate();
 	
+	var updatetimer = 0;
+	
 	//newgame();
 	//main();
 
@@ -1668,8 +1670,11 @@
 			pacTimer= setTimeout("main()", 7);
 		//}
 			if(isPac){
-				//sendData(e, lastrecivedkey);
+				if(updatetimer > 10){
+					sendData(e, "$");
+				}
 			}
+			updatetimer++;
 		
 	if(isPac){
 		//updategs(pacgs);

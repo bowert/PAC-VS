@@ -511,6 +511,8 @@
 	var lastrecivedkey = 0;
 	var pacgs = new gamestate();
 	
+	var updatetimer = 0;
+	
 	//newgame();
 	//main();
 
@@ -878,7 +880,6 @@
 						}
 						break;
 					case -1:
-						console.log(y);
 						var mazeY = mazeGrid[y-1].charAt(x-1);
 						if(mazeY == '0'){
 							dir = 0;
@@ -1669,7 +1670,7 @@
 			pacTimer= setTimeout("main()", 7);
 		//}
 			if(isPac){
-				//sendData(e, lastrecivedkey);
+				sendData(e, "$");
 			}
 		
 	if(isPac){
