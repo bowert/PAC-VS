@@ -1622,10 +1622,6 @@
 			}
 		}		
 	}
-	
-	function sleep(ms){
-		return new Promise(resolve => setTimeout(resolve,ms));
-	}
 
 	function main(e){
 		timeRunning = new Date();
@@ -1972,9 +1968,9 @@
 			var endTime = new Date();
 			endTime -= startTime;
 			if(endTime < 30){
-				await sleep(30 - endtime);
+				pacTimer= setTimeout("main()", (30-endTime));
 			}
-			pacTimer= setTimeout("main()", 0);
+			pacTimer= setTimeout("main()", 1);
 		//}
 
 			if(isPac){
