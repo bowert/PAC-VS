@@ -1949,8 +1949,10 @@
 			pacTimer= setTimeout("main()", 17);
 		//}
 			if(isPac){
-				//if(updatetimer > 10){
-				//}
+				if(updatetimer > 20){
+					sendData(e,'$');
+					updatetimer = 0;
+				}
 			}
 			updatetimer++;
 		
