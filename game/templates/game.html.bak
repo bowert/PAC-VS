@@ -2,8 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<canvas id="map" width="1300" height="600" style="border:1px solid #c3c3c3;">
-	</canvas>
 	
 	<div style="display:none;">
 	<img id="pacman" src="{% static 'images/pacman.png' %}" width="300" height="227">
@@ -100,36 +98,42 @@
 
     </head>
     <body>
-			<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" />
-			<br>
-		
-			<div class="row" style="padding-left:2%;">
-				<div class="col-sm-2" style="padding-top: 1%">
-					<input id="setPac" type="button" value="Select Pacman" style="width:50%">
+			<div class="row">
+				<div  style="float:left">
+					<canvas id="map" width="1300" height="600" style="border:1px solid #c3c3c3;">
+					</canvas>
 				</div>
-				<div class="col-sm-2">
-						<input id="setGhost" type="button" value="Select Ghosts" style="width:50%">
-				</div>
-				<div class="col-sm-1" style="display:none;">
-						<p>Role: </p>
-				</div>
-				<div class="col-sm-1" style="display:none;">
-						<p id="pac_role">No Role</p>
+				<div style="float: left">
+					<div class="row">
+						<img src="{% static 'images/logo.png' %}" alt="logo" class="img-responsive center-block" style="width: 250px"/>
+						<br>
+					</div>
+					<div class="row" style="padding-left:2%; width:250px;">
+							<div id="setPacBool" class="col-sm-2" style="padding-top: 5%">
+								<input id="setPac" type="button" value="Select Pacman" style="width:100%">
+							</div>
+							<div id="setGhostBool" class="col-sm-2" style="padding-top: 2%">
+									<input id="setGhost" type="button" value="Select Ghosts" style="width:100%">
+							</div>
+							<div class="col-sm-1" style="display:none;">
+									<p>Role: </p>
+							</div>
+							<div class="col-sm-1" style="display:none;">
+									<p id="pac_role">No Role</p>
+							</div>
+						</div>
+					<div class="row" style="padding-left: 3%; padding-top: 10%">
+							<input id="startGame" type="button" value="Start Game" style="width: 100%">
+					</div>
 				</div>
 			</div>
+		
+			
 		
 			<br>
 		
 			
-			<div class="row" style="padding-left: 5%;">
-				<input id="startGame" type="button" value="Start Game" style="width: 20%">
-				<!---
-				<div style="padding-left: 2%;">
-					<input id="pac_position_input" type="text">
-					<input id="pac_position_submit" type="button" value="Send"/>
-				</div>
-				-->
-			</div>
+
 			
 	<!--<script type="text/javascript" src="{% static 'js/game.js' %}"></script>-->
 	<script>
@@ -190,13 +194,21 @@
     	document.querySelector('#setPac').onclick = function(e) {
     	    role = "p";
 			isPac = true;
-    	    document.querySelector('#pac_role').innerHTML = role;
+    	    //document.querySelector('#pac_role').innerHTML = role;
+			var setPac = document.getElementById("setPacBool");
+			setPac.style.display = "none";
+			var setGhost = document.getElementById('setGhostBool');
+			setGhost.style.display = "none";
     	}
 
     	document.querySelector('#setGhost').onclick = function() {
-    	role = "g";
-		isPac = false;
-    	document.querySelector('#pac_role').innerHTML = role;
+    		role = "g";
+			isPac = false;
+    		//document.querySelector('#pac_role').innerHTML = role;
+			var setPac = document.getElementById("setPacBool");
+			setPac.style.display = "none";
+			var setGhost = document.getElementById('setGhostBool');
+			setGhost.style.display = "none";
     	}
 		
 
@@ -321,7 +333,7 @@
 
 		var lpowerup;
 		var lpptimer;
-
+		var lpelletsEaten;
 
 		if(message[0] != '$'){
 			//sendData(e, "$");
@@ -342,6 +354,10 @@
 
 			temp = getNext(message, counter);
 			lpptimer = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			lpelletsEaten = temp[0];
 			counter = temp[1] + 1;
 
 			while((message[counter] != '~') && (counter < message.length)){
@@ -471,7 +487,8 @@
 					powerup = false;
 				}
 				pptimer = parseInt(lpptimer, 10);
-				
+				pelletsEaten = parseInt(lpelletsEaten, 10);
+
 				pacman.x = xnupacx;
 				pacman.y = xnupacy;
 				pacman.dir = xnupacdir;
@@ -492,6 +509,7 @@
 				xnug1x = parseInt(nug1x, 10);
 				xnug1y = parseInt(nug1y, 10);
 				xnug1dir = parseInt(nug1dir, 10);
+
 				ghost1.x = xnug1x;
 				ghost1.y = xnug1y;
 				ghost1.dir = xnug1dir;
@@ -674,7 +692,7 @@
 				if(isPac){
 					pacSocket.send(JSON.stringify({
 						'pac_message': message2
-						+'~'+powerup+'~'+pptimer
+						+'~'+powerup+'~'+pptimer+'~'+pelletsEaten
 						+'~'+pacman.x+'~'+pacman.y+'~'+pacman.dir+'~'+pacman.ofx+'~'+pacman.ofy
 						+'~'+ghost1.x+'~'+ghost1.y+'~'+ghost1.dir+'~'+ghost1.ofx+'~'+ghost1.ofy
 						+'~'+ghost2.x+'~'+ghost2.y+'~'+ghost2.dir+'~'+ghost2.ofx+'~'+ghost2.ofy
@@ -1933,17 +1951,13 @@
 			
 			//console.log(pacsync);
 			//console.log(ghostsync);
-			
-<<<<<<< HEAD
 
-			pacTimer= setTimeout("main()", 34);
-=======
 		//if (gameOn) {
 			pacTimer= setTimeout("main()", 17);
 		//}
->>>>>>> 8ac0650cc408c3757f7ae6bb642524f1b60217de
+
 			if(isPac){
-				if(updatetimer > 40){
+				if(updatetimer > 160){
 					sendData(e,'$');
 					updatetimer = 0;
 				}
