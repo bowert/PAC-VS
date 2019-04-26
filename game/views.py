@@ -84,6 +84,12 @@ def pac_test(request, room_name):
             'room_name_json': mark_safe(json.dumps(room_name))
         })
 
+def lose(request):
+    return render(request, 'loser.html')
+
+def winner(request):
+    return render(request, 'winner.html')
+
 def win(request, pellets, power, win):
 
     stats = Stats.objects.filter(id=1).first()
@@ -91,7 +97,7 @@ def win(request, pellets, power, win):
     print("pellets", pellets)
     stats.pellets += int(pellets)
     print("power", power)
-    stats.PP ++ int(power)
+    stats.PP += int(power)
     print("win", win)
     if (win == 'pacman'):
         stats.pacVictories += 1
@@ -99,4 +105,4 @@ def win(request, pellets, power, win):
         stats.ghostVictories += 1
     stats.save()
 
-    return redirect('/home')
+    return redirect('/winner')
