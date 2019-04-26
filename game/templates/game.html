@@ -1966,8 +1966,12 @@
 
 		//if (gameOn) {
 			var endTime = new Date();
+			console.log(endTime);
+			console.log(startTime);
 			endTime -= startTime;
-			console.log(endTime)
+			console.log(endTime);
+			console.log("break");
+			
 			if(endTime < 30){
 				pacTimer= setTimeout("main()", (30-endTime));
 			}
