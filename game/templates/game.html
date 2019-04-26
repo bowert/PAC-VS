@@ -309,6 +309,10 @@
 		var nug4dir = "";
 		var xnug4dir;
 		
+		var lpowerup;
+		var lpptimer;
+
+
 		if(message[0] != '$'){
 			//sendData(e, "$");
 			//return;
@@ -321,6 +325,15 @@
 			if(message[2] == '~'){
 			//console.log(message.length);
 			var counter = 3;
+
+			temp = getNext(message, counter);
+			lpowerup = temp[0];
+			counter = temp[1] + 1;
+
+			temp = getNext(message, counter);
+			lpptimer = temp[0];
+			counter = temp[1] + 1;
+
 			while((message[counter] != '~') && (counter < message.length)){
 				nupacx += message[counter];
 				counter++;
@@ -394,6 +407,13 @@
 				xnupacx = parseInt(nupacx, 10);
 				xnupacy = parseInt(nupacy, 10);
 				xnupacdir = parseInt(nupacdir, 10);
+				if(lpowerup === 'true'){
+					powerup = true;
+				}
+				else{
+					powerup = false;
+				}
+				pptimer = parseInt(lpptimer, 10);
 				
 				pacman.x = xnupacx;
 				pacman.y = xnupacy;
@@ -596,7 +616,9 @@
     	        message2 = role + message;
 				if(isPac){
 					pacSocket.send(JSON.stringify({
-						'pac_message': message2+'~'+pacman.x+'~'+pacman.y+'~'+pacman.dir
+						'pac_message': message2
+						+'~'+powerup+'~'+pptimer
+						+'~'+pacman.x+'~'+pacman.y+'~'+pacman.dir
 						+'~'+ghost1.x+'~'+ghost1.y+'~'+ghost1.dir
 						+'~'+ghost2.x+'~'+ghost2.y+'~'+ghost2.dir
 						+'~'+ghost3.x+'~'+ghost3.y+'~'+ghost3.dir
