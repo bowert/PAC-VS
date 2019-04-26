@@ -302,6 +302,7 @@
 		
 		if(message[0] != '$'){
 			sendData(e, "$");
+			//return;
 		}
 		
 		
